@@ -2,16 +2,16 @@
 {
     public class Transferencia : Operacao
     {
-        public TipoTransferencia TipoTransferencia { get; set; }
+        public TipoMovimentacao TipoMovimentacao { get; set; }
 
         public Transferencia()
         {
         }
 
-        public Transferencia(decimal valor, string descricao, decimal saldoAnterior, TipoTransferencia tipoTransferencia)
+        public Transferencia(decimal valor, string descricao, decimal saldoAnterior, TipoMovimentacao tipoMovimentacao)
             : base(valor, descricao, saldoAnterior)
         {
-            TipoTransferencia = tipoTransferencia;
+            TipoMovimentacao = tipoMovimentacao;
         }
     }
 }

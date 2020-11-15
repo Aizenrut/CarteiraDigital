@@ -10,15 +10,18 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
         public string Sobrenome { get; set; }
         public string Cpf { get; set; }
         public DateTime DataNascimento { get; set; }
-        public Conta Conta { get; set; }
         public bool Ativo { get; set; }
 
         public Usuario()
         {
         }
 
-        public Usuario(string nomeUsuario) : base(nomeUsuario)
+        public Usuario(string nomeUsuario, string nome, string sobrenome, string cpf, DateTime dataNascimento) : base(nomeUsuario)
         {
+            Nome = nome;
+            Sobrenome = sobrenome;
+            Cpf = cpf;
+            DataNascimento = dataNascimento;
             Ativo = true;
         }
     }

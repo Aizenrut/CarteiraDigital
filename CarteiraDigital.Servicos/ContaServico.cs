@@ -13,10 +13,21 @@ namespace CarteiraDigital.Servicos
             this.contaRepositorio = contaRepositorio;
         }
 
+        public void Cadastrar(string usuarioTitular)
+        {
+            var conta = new Conta(usuarioTitular);
+            contaRepositorio.Post(conta);
+        }
+
         public Conta ObterConta(int contaId)
         {
             ValidarConta(contaId);
             return contaRepositorio.Get(contaId);
+        }
+
+        public void ObterMovimentacao(int contaId, DateTime dataInicial, DateTime dataFinal)
+        {
+
         }
 
         public void ValidarConta(int contaId)

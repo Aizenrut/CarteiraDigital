@@ -33,14 +33,14 @@ namespace CarteiraDigital.Servicos
         {
             using (var transacao = transacaoServico.GerarNova())
             {
-                TransferirPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoTransferencia.Saida);
-                TransferirPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoTransferencia.Entrada);
+                TransferirPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
+                TransferirPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
 
                 transacao.Finalizar();
             }
         }
 
-        public void TransferirPeloTipo(int contaId, decimal valor, string descricao,  TipoTransferencia tipoTransferencia)
+        public void TransferirPeloTipo(int contaId, decimal valor, string descricao,  TipoMovimentacao tipoTransferencia)
         {
             var conta = contaServico.ObterConta(contaId);
             var transferencia = new Transferencia(valor, descricao, conta.Saldo, tipoTransferencia);

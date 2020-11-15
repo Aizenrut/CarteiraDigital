@@ -2,9 +2,8 @@
 
 namespace CarteiraDigital.Servicos
 {
-    public interface ICashOutServico
+    public interface ICashOutServico : IOperacaoStrategy<OperacaoUnariaDto>
     {
-        void Efetivar(OperacaoUnariaDto dto);
         CashOut GerarCashOut(Conta conta, decimal valor, string descricao);
     }
 }

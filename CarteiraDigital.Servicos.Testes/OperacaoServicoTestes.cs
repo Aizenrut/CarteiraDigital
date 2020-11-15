@@ -8,6 +8,71 @@ namespace CarteiraDigital.Servicos.Testes
     public class OperacaoServicoTestes
     {
         [TestMethod]
+        public void MarcarPendente_NovaOperacao_DeveAlterarOStatus()
+        {
+            // Arrange
+            var operacao = new CashIn();
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.MarcarPendente(operacao);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.Pendente, operacao.Status);
+        }
+
+        [TestMethod]
+        public void MarcarEfetivada_OperacaoPendente_DeveAlterarOStatus()
+        {
+            // Arrange
+            var operacao = new CashIn
+            {
+                Status = StatusOperacao.Pendente
+            };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.MarcarEfetivada(operacao);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.Efetivada, operacao.Status);
+        }
+
+        [TestMethod]
+        public void MarcarComErro_OperacaoPendente_DeveAlterarOStatus()
+        {
+            // Arrange
+            var operacao = new CashIn
+            {
+                Status = StatusOperacao.Pendente
+            };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.MarcarComErro(operacao);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.ComErro, operacao.Status);
+        }
+
+        [TestMethod]
+        public void AlterarStatusTemplate_StatusPendente_DeveAlterarOStatus()
+        {
+            // Arrange
+            var operacao = new CashIn
+            {
+                Status = StatusOperacao.Pendente
+            };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Pendente);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.Pendente, operacao.Status);
+        }
+
+        [TestMethod]
         public void ValidarValor_ValorMenorQueZero_DeveLancarExcecao()
         {
             // Arrange
@@ -162,10 +227,8 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.AreEqual(100, conta.Saldo);
         }
 
-        
-
         [TestMethod]
-        public void RealizarValidacaoArgumentoTemplate_CondicaoVerdadeira_DeveLancarArgumentException()
+        public void ValidarArgumentoTemplate_CondicaoVerdadeira_DeveLancarArgumentException()
         {
             // Arrange
             var mensagem = "Teste unitário.";
@@ -173,7 +236,7 @@ namespace CarteiraDigital.Servicos.Testes
             var operacaoServico = new OperacaoServico();
 
             // Act
-            Action acao = () => operacaoServico.RealizarValidacaoArgumentoTemplate(true, mensagem);
+            Action acao = () => operacaoServico.ValidarArgumentoTemplate(true, mensagem);
 
             //Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
@@ -181,17 +244,17 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void RealizarValidacaoArgumentoTemplate_CondicaoFalsa_NaoDeveLancarArgumentException()
+        public void ValidarArgumentoTemplate_CondicaoFalsa_NaoDeveLancarArgumentException()
         {
             // Arrange
             var operacaoServico = new OperacaoServico();
 
             // Act and Assert
-            operacaoServico.RealizarValidacaoArgumentoTemplate(false, "Teste unitário.");
+            operacaoServico.ValidarArgumentoTemplate(false, "Teste unitário.");
         }
 
         [TestMethod]
-        public void RealizarOperacaoTemplate_ValorInvalido_DeveLancarExcecaoEPararOProcesso()
+        public void AlterarValoresTemplate_ValorInvalido_DeveLancarExcecaoEPararOProcesso()
         {
             // Arrange
             var conta = new Conta { Saldo = 1 };
@@ -204,7 +267,7 @@ namespace CarteiraDigital.Servicos.Testes
             var operacaoServico = new OperacaoServico();
 
             // Act
-            Action acao = () => operacaoServico.RealizarOperacaoTemplate(conta, -1, acaoPrincipal);
+            Action acao = () => operacaoServico.AlterarValoresTemplate(conta, -1, acaoPrincipal);
 
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
@@ -213,7 +276,7 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void RealizarOperacaoTemplate_Valido_DeveExecutarAcaoPrincipal()
+        public void AlterarValoresTemplate_Valido_DeveExecutarAcaoPrincipal()
         {
             // Arrange
             var conta = new Conta { Saldo = 1 };
@@ -227,7 +290,7 @@ namespace CarteiraDigital.Servicos.Testes
             var operacaoServico = new OperacaoServico();
 
             // Act
-            operacaoServico.RealizarOperacaoTemplate(conta, valor, acaoPrincipal);
+            operacaoServico.AlterarValoresTemplate(conta, valor, acaoPrincipal);
 
             // Assert
             Assert.AreEqual(valor, conta.Saldo);

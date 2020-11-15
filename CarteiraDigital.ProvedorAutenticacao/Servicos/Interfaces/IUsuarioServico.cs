@@ -12,5 +12,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
         Task<IdentityResult> CadastrarAsync(CadastroUsuarioDto cadastro);
         Task<IdentityResult> AlterarSenhaAsync(Usuario usuario, string senhaAtual, string novaSenha);
         Task<IdentityResult> InativarAsync(Usuario usuario);
+        bool PossuiIdadeMinima(Usuario usuario);
+        void ValidarUsuario(Usuario usuario);
     }
 }

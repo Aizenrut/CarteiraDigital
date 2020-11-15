@@ -2,7 +2,7 @@
 
 namespace CarteiraDigital.Models
 {
-    public enum TipoTransferencia
+    public enum TipoMovimentacao
     {
         [Description("Saída")]
         Saida,

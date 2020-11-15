@@ -28,7 +28,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
 
             // Act
-            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoTransferencia.Saida);
+            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
@@ -58,7 +58,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
 
             // Act
-            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoTransferencia.Saida);
+            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
@@ -87,7 +87,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
 
             // Act
-            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoTransferencia.Saida);
+            Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
@@ -107,7 +107,7 @@ namespace CarteiraDigital.Servicos.Testes
                 Saldo = valor
             };
 
-            var tipoTransferencia = TipoTransferencia.Saida;
+            var tipoTransferencia = TipoMovimentacao.Saida;
             Transferencia transferenciaGerada = null;
 
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
@@ -129,10 +129,10 @@ namespace CarteiraDigital.Servicos.Testes
 
             // Assert
             Assert.IsNotNull(transferenciaGerada);
-            Assert.AreEqual(tipoTransferencia, transferenciaGerada.TipoTransferencia);
+            Assert.AreEqual(tipoTransferencia, transferenciaGerada.TipoMovimentacao);
             Assert.AreEqual(valor, transferenciaGerada.SaldoAnterior);
             Assert.AreEqual(valor, transferenciaGerada.Valor);
-            Assert.AreNotEqual(default, transferenciaGerada.DataEfetivacao);
+            Assert.AreNotEqual(default, transferenciaGerada.Data);
             Assert.AreEqual(0, conta.Saldo);
         }
 
@@ -146,7 +146,7 @@ namespace CarteiraDigital.Servicos.Testes
                 Id = 1,
             };
 
-            var tipoTransferencia = TipoTransferencia.Entrada;
+            var tipoTransferencia = TipoMovimentacao.Entrada;
             Transferencia transferenciaGerada = null;
 
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
@@ -168,10 +168,10 @@ namespace CarteiraDigital.Servicos.Testes
 
             // Assert
             Assert.IsNotNull(transferenciaGerada);
-            Assert.AreEqual(tipoTransferencia, transferenciaGerada.TipoTransferencia);
+            Assert.AreEqual(tipoTransferencia, transferenciaGerada.TipoMovimentacao);
             Assert.AreEqual(0, transferenciaGerada.SaldoAnterior);
             Assert.AreEqual(valor, transferenciaGerada.Valor);
-            Assert.AreNotEqual(default, transferenciaGerada.DataEfetivacao);
+            Assert.AreNotEqual(default, transferenciaGerada.Data);
             Assert.AreEqual(valor, conta.Saldo);
         }
 
@@ -218,8 +218,8 @@ namespace CarteiraDigital.Servicos.Testes
             transacaoServico.Received(1).Finalizar();
             Assert.IsNotNull(transferenciasGeradas);
             Assert.AreEqual(2, transferenciasGeradas.Count);
-            Assert.AreEqual(TipoTransferencia.Saida, transferenciasGeradas[0].TipoTransferencia);
-            Assert.AreEqual(TipoTransferencia.Entrada, transferenciasGeradas[1].TipoTransferencia);
+            Assert.AreEqual(TipoMovimentacao.Saida, transferenciasGeradas[0].TipoMovimentacao);
+            Assert.AreEqual(TipoMovimentacao.Entrada, transferenciasGeradas[1].TipoMovimentacao);
         }
 
         [TestMethod]

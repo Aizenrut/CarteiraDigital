@@ -5,13 +5,17 @@ VisualStudioVersion = 16.0.30626.31
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.ProvedorAutenticacao", "CarteiraDigital.ProvedorAutenticacao\CarteiraDigital.ProvedorAutenticacao.csproj", "{1C598A65-31DA-4BF4-A9B1-EBF7B916BE18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Models", "CarteiraDigital.Models\CarteiraDigital.Models.csproj", "{FCD80AA3-70C9-489E-AAF5-28BCCDA8600D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Models", "CarteiraDigital.Models\CarteiraDigital.Models.csproj", "{FCD80AA3-70C9-489E-AAF5-28BCCDA8600D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Dados", "CarteiraDigital.Dados\CarteiraDigital.Dados.csproj", "{227FA93C-D913-4187-9CB4-B639DF347F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Dados", "CarteiraDigital.Dados\CarteiraDigital.Dados.csproj", "{227FA93C-D913-4187-9CB4-B639DF347F30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Servicos", "CarteiraDigital.Servicos\CarteiraDigital.Servicos.csproj", "{D9933412-5BE1-46D2-9976-38E658D5FCB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Servicos", "CarteiraDigital.Servicos\CarteiraDigital.Servicos.csproj", "{D9933412-5BE1-46D2-9976-38E658D5FCB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Servicos.Testes", "CarteiraDigital.Servicos.Testes\CarteiraDigital.Servicos.Testes.csproj", "{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Servicos.Testes", "CarteiraDigital.Servicos.Testes\CarteiraDigital.Servicos.Testes.csproj", "{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.ProvedorAutenticacao.Testes", "CarteiraDigital.ProvedorAutenticacao.Testes\CarteiraDigital.ProvedorAutenticacao.Testes.csproj", "{C7E02207-4763-4746-9B06-A60D90ACB29A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Dados.Testes", "CarteiraDigital.Dados.Testes\CarteiraDigital.Dados.Testes.csproj", "{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7E02207-4763-4746-9B06-A60D90ACB29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7E02207-4763-4746-9B06-A60D90ACB29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7E02207-4763-4746-9B06-A60D90ACB29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7E02207-4763-4746-9B06-A60D90ACB29A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

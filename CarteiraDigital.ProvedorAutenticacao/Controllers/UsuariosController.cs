@@ -22,10 +22,10 @@ namespace CarteiraDigital.ProvedorAutenticacao.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var result = await usuarioServico.CadastrarAsync(cadastro);
+            var resultado = await usuarioServico.CadastrarAsync(cadastro);
 
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            if (!resultado.Succeeded)
+                return BadRequest(resultado.Errors);
 
             var loginUri = Url.Action("Autenticar", "Login", null, HttpContext.Request.Scheme);
 

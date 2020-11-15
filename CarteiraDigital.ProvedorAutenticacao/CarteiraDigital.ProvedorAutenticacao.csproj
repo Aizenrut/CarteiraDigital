@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarteiraDigital.Models\CarteiraDigital.Models.csproj" />
+    <ProjectReference Include="..\CarteiraDigital.Servicos\CarteiraDigital.Servicos.csproj" />
   </ItemGroup>
 
 </Project>

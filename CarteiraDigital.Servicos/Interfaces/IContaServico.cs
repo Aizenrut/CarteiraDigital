@@ -4,6 +4,7 @@ namespace CarteiraDigital.Servicos
 {
     public interface IContaServico
     {
+        void Cadastrar(string usuarioTitular);
         Conta ObterConta(int contaId);
         void ValidarConta(int contaId);
         void VincularCashIn(Conta conta, CashIn cashIn);

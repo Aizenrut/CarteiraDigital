@@ -5,6 +5,7 @@ using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CarteiraDigital.Servicos.Testes
 {
@@ -94,10 +95,10 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
 
-            var operacaoServico = new ContaServico(contaRepositorio);
+            var contaServico = new ContaServico(contaRepositorio);
 
             // Act
-            operacaoServico.VincularCashOut(conta, cashOut);
+            contaServico.VincularCashOut(conta, cashOut);
 
             // Assert
             contaRepositorio.Received(1).Update(conta);
@@ -114,15 +115,37 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
 
-            var operacaoServico = new ContaServico(contaRepositorio);
+            var contaServico = new ContaServico(contaRepositorio);
 
             // Act
-            operacaoServico.VincularTransferencia(conta, transferencia);
+            contaServico.VincularTransferencia(conta, transferencia);
 
             // Assert
             contaRepositorio.Received(1).Update(conta);
             Assert.IsTrue(conta.Transferencias.Any());
             Assert.AreSame(transferencia, conta.Transferencias.First());
+        }
+
+        [TestMethod]
+        public void Nova_ContaVazia_DeveCriarESalvar()
+        {
+            // Arrange
+            var usuario = "teste123";
+            Conta contaCriada = null;
+
+            var contaRepositorio = Substitute.For<IContaRepositorio>();
+            contaRepositorio.When(x => x.Post(Arg.Any<Conta>()))
+                            .Do(x => contaCriada = x.Arg<Conta>());
+
+            var contaServico = new ContaServico(contaRepositorio);
+
+            // Act
+            contaServico.Cadastrar(usuario);
+
+            // Assert
+            contaRepositorio.Received(1).Post(contaCriada);
+            Assert.IsNotNull(contaCriada);
+            Assert.AreEqual(usuario, contaCriada.UsuarioTitular);
         }
     }
 }

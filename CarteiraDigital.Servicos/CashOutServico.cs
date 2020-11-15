@@ -1,6 +1,5 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Models;
-using System;
 
 namespace CarteiraDigital.Servicos
 {

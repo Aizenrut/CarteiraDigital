@@ -27,7 +27,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.AreEqual(valor, result.Valor);
             Assert.AreEqual(0.1m, result.ValorTaxa);
             Assert.AreEqual(descricao, result.Descricao);
-            Assert.AreNotEqual(default, result.DataEfetivacao);
+            Assert.AreNotEqual(default, result.Data);
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.AreEqual(valor, cashOutGerado.Valor);
             Assert.AreEqual(0.1m, cashOutGerado.ValorTaxa);
             Assert.AreEqual(descricao, cashOutGerado.Descricao);
-            Assert.AreNotEqual(default, cashOutGerado.DataEfetivacao);
+            Assert.AreNotEqual(default, cashOutGerado.Data);
             cashOutRepositorio.Received(1).Post(Arg.Any<CashOut>());
             Assert.IsTrue(conta.CashOuts.Contains(cashOutGerado));
         }

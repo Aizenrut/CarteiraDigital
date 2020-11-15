@@ -8,6 +8,11 @@ using System.IdentityModel.Tokens.Jwt;
 using CarteiraDigital.ProvedorAutenticacao.Dados;
 using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.ProvedorAutenticacao.Servicos;
+using CarteiraDigital.Servicos;
+using CarteiraDigital.Dados.Repositorios;
+using CarteiraDigital.Dados.Expressoes;
+using CarteiraDigital.Dados.Contexts;
+using CarteiraDigital.ProvedorAutenticacao.Builders;
 
 namespace CarteiraDigital.ProvedorAutenticacao
 {
@@ -29,6 +34,11 @@ namespace CarteiraDigital.ProvedorAutenticacao
                 options.UseSqlServer(configuration.GetConnectionString("CarteiraDigital"));
             });
 
+            services.AddDbContext<CarteiraDigitalContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("CarteiraDigital"));
+            });
+
             services.AddIdentity<Usuario, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = false;
@@ -36,8 +46,16 @@ namespace CarteiraDigital.ProvedorAutenticacao
                 options.Lockout.MaxFailedAccessAttempts = 3;
             }).AddEntityFrameworkStores<CarteiraDigitalAutorizacaoContext>();
 
+            services.AddTransient<IUsuarioBuilder, UsuarioBuilder>();
+            services.AddTransient<IOperacaoExpressao, OperacaoExpressao>();
+
+            services.AddTransient<IContaRepositorio, ContaRepositorio>();
+
             services.AddTransient<ILoginServico, LoginServico>();
             services.AddTransient<IUsuarioServico, UsuarioServico>();
+            services.AddTransient<IContaServico, ContaServico>();
+            services.AddTransient<IValidacaoDocumentosServico, ValidacaoDocumentosServico>();
+
             services.TryAddTransient<JwtSecurityTokenHandler>();
         }
 

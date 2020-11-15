@@ -65,7 +65,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.IsNotNull(result);
             Assert.AreEqual(11m, result.Valor);
             Assert.AreEqual(descricao, result.Descricao);
-            Assert.AreNotEqual(default, result.DataEfetivacao);
+            Assert.AreNotEqual(default, result.Data);
         }
 
         [TestMethod]
@@ -88,7 +88,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.IsNotNull(result);
             Assert.AreEqual(valor, result.Valor);
             Assert.AreEqual(descricao, result.Descricao);
-            Assert.AreNotEqual(default, result.DataEfetivacao);
+            Assert.AreNotEqual(default, result.Data);
         }
 
         [TestMethod]
@@ -122,7 +122,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.IsNotNull(cashInGerado);
             Assert.AreEqual(11m, cashInGerado.Valor);
             Assert.AreEqual(descricao, cashInGerado.Descricao);
-            Assert.AreNotEqual(default, cashInGerado.DataEfetivacao);
+            Assert.AreNotEqual(default, cashInGerado.Data);
         }
 
         [TestMethod]
@@ -157,7 +157,7 @@ namespace CarteiraDigital.Servicos.Testes
             Assert.IsNotNull(cashInGerado);
             Assert.AreEqual(valor, cashInGerado.Valor);
             Assert.AreEqual(descricao, cashInGerado.Descricao);
-            Assert.AreNotEqual(default, cashInGerado.DataEfetivacao);
+            Assert.AreNotEqual(default, cashInGerado.Data);
         }
 
         [TestMethod]

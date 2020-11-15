@@ -7,9 +7,10 @@ namespace CarteiraDigital.Models
         public int ContaId { get; set; }
         public decimal Valor { get; set; }
         public string Descricao { get; set; }
-        public DateTime DataEfetivacao { get; set; }
+        public DateTime Data { get; set; }
         public StatusOperacao Status { get; set; }
         public decimal SaldoAnterior { get; set; }
+        public string Erro { get; set; }
 
         public Operacao()
         {
@@ -19,7 +20,7 @@ namespace CarteiraDigital.Models
         {
             Valor = valor;
             Descricao = descricao;
-            DataEfetivacao = DateTime.Now;
+            Data = DateTime.Now;
             SaldoAnterior = saldoAnterior;
         }
     }

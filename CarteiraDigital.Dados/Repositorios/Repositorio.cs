@@ -8,7 +8,7 @@ namespace CarteiraDigital.Dados.Repositorios
 {
     public abstract class Repositorio<T> where T : Entidade
     {
-        private readonly CarteiraDigitalContext context;
+        protected readonly CarteiraDigitalContext context;
 
         public Repositorio(CarteiraDigitalContext context)
         {
