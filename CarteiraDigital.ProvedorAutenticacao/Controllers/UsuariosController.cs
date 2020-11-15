@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.ProvedorAutenticacao.Servicos;
+using CarteiraDigital.ProvedorAutenticacao.Models;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Controllers
 {

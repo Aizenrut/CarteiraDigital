@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CarteiraDigital.Models;
 using Microsoft.EntityFrameworkCore;
-using CarteiraDigital.ProvedorAutenticacao.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
-namespace CarteiraDigital.ProvedorAutenticacao.Dados
+namespace CarteiraDigital.Dados.Contexts
 {
-    public class CarteiraDigitalAutorizacaoContext : IdentityDbContext<Usuario>
+    public class CarteiraDigitalContext : DbContext
     {
         private static bool tabelasCriadas;
 
-        public CarteiraDigitalAutorizacaoContext(DbContextOptions<CarteiraDigitalAutorizacaoContext> options) : base(options)
+        public DbSet<Conta> Contas { get; set; }
+        public DbSet<CashIn> CashIns { get; set; }
+        public DbSet<CashOut> CashOuts { get; set; }
+        public DbSet<Transferencia> Transferencias { get; set; }
+
+        public CarteiraDigitalContext(DbContextOptions<CarteiraDigitalContext> options) : base(options)
         {
             Database.EnsureCreated();
 
