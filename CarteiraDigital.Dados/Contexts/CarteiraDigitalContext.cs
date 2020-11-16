@@ -13,6 +13,7 @@ namespace CarteiraDigital.Dados.Contexts
         public DbSet<CashIn> CashIns { get; set; }
         public DbSet<CashOut> CashOuts { get; set; }
         public DbSet<Transferencia> Transferencias { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         public CarteiraDigitalContext(DbContextOptions<CarteiraDigitalContext> options) : base(options)
         {

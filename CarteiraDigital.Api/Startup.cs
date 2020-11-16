@@ -81,14 +81,15 @@ namespace CarteiraDigital.Api
             services.AddTransient<ICashInRepositorio, CashInRepositorio>();
             services.AddTransient<ICashOutRepositorio, CashOutRepositorio>();
             services.AddTransient<ITransferenciaRepositorio, TransferenciaRepositorio>();
+            services.AddTransient<ILogRepositorio, LogRepositorio>();
             services.AddTransient<IConfiguracaoServico, ConfiguracaoServico>();
             services.AddTransient<IContaServico, ContaServico>();
             services.AddTransient<IOperacaoServico, OperacaoServico>();
             services.AddTransient<ICashInServico, CashInServico>();
             services.AddTransient<ICashOutServico, CashOutServico>();
             services.AddTransient<ITransferenciaServico, TransferenciaServico>();
-            services.AddTransient<IContaServico, ContaServico>();
             services.AddTransient<IValidacaoDocumentosServico, ValidacaoDocumentosServico>();
+            services.AddTransient<ILogServico, LogServico>();
 
             services.AddSwaggerGen(options =>
             {

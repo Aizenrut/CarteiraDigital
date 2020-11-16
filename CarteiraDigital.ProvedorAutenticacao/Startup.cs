@@ -65,11 +65,13 @@ namespace CarteiraDigital.ProvedorAutenticacao
             services.AddTransient<IUsuarioBuilder, UsuarioBuilder>();
             services.AddTransient<IOperacaoExpressao, OperacaoExpressao>();
             services.AddTransient<IContaRepositorio, ContaRepositorio>();
+            services.AddTransient<ILogRepositorio, LogRepositorio>();
             services.AddTransient<IConfiguracaoServico, ConfiguracaoServico>();
             services.AddTransient<ILoginServico, LoginServico>();
             services.AddTransient<IUsuarioServico, UsuarioServico>();
             services.AddTransient<IContaServico, ContaServico>();
             services.AddTransient<IValidacaoDocumentosServico, ValidacaoDocumentosServico>();
+            services.AddTransient<ILogServico, LogServico>();
             services.TryAddTransient<JwtSecurityTokenHandler>();
 
             services.AddSwaggerGen(options =>

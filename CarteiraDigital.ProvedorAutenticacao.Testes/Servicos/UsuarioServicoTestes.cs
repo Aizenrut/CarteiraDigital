@@ -1,4 +1,5 @@
-﻿using CarteiraDigital.ProvedorAutenticacao.Models;
+﻿using CarteiraDigital.Models;
+using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.ProvedorAutenticacao.Servicos;
 using CarteiraDigital.Servicos;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

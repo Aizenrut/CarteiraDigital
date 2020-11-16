@@ -11,15 +11,13 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
     {
         public string Code { get; set; }
         public string Message { get; set; }
-        public string Target { get; set; }
         public ErroDto[] Details { get; set; }
         public ErroDto InnerError { get; set; }
 
-        private ErroDto(string code, string message, string target, ErroDto[] details, ErroDto innerError)
+        private ErroDto(string code, string message, ErroDto[] details, ErroDto innerError)
         {
             Code = code;
             Message = message;
-            Target = target;
             Details = details;
             InnerError = innerError;
         }
@@ -28,7 +26,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
         {
             return new ErroDto(code: StatusCodes.Status404NotFound.ToString(),
                                message: $"Not Found ({busca})",
-                               target: null,
                                details: null,
                                innerError: null);
         }
@@ -40,7 +37,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
 
             return new ErroDto(code: exception.HResult.ToString(),
                                message: exception.Message,
-                               target: exception.StackTrace,
                                details: null,
                                innerError: Para(exception.InnerException));
         }
@@ -51,7 +47,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
                 return null;
 
             var details = modelState.Values.SelectMany(x => x.Errors)
-                                           .Select(x => new ErroDto("400", x.ErrorMessage, null, null, null))
+                                           .Select(x => new ErroDto("400", x.ErrorMessage, null, null))
                                            .ToArray();
 
             return BadRequestError(details);
@@ -59,7 +55,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
 
         public static ErroDto Para(IEnumerable<IdentityError> identityErrors)
         {
-            var details = identityErrors.Select(x => new ErroDto(x.Code, x.Description, null, null, null))
+            var details = identityErrors.Select(x => new ErroDto(x.Code, x.Description, null, null))
                                         .ToArray();
 
             return BadRequestError(details);
@@ -69,7 +65,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
         {
             return new ErroDto(code: "400",
                                message: "O conteúdo enviado na requisição é inválido.",
-                               target: null,
                                details: details,
                                innerError: null);
         }
