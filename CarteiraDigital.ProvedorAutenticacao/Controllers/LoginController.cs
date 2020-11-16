@@ -8,7 +8,8 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 namespace CarteiraDigital.ProvedorAutenticacao.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly ILoginServico loginServico;

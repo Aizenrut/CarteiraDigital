@@ -28,6 +28,7 @@ namespace CarteiraDigital.ProvedorAutenticacao
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddApiVersioning();
 
             services.AddDbContext<CarteiraDigitalAutorizacaoContext>(options =>
             {
@@ -60,6 +61,7 @@ namespace CarteiraDigital.ProvedorAutenticacao
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseApiVersioning();
             app.UseMvc();
         }
     }

@@ -27,6 +27,7 @@ namespace CarteiraDigital.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddApiVersioning();
 
             services.AddDbContext<CarteiraDigitalContext>(options =>
             {
@@ -77,6 +78,7 @@ namespace CarteiraDigital.Api
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseApiVersioning();
             app.UseAuthentication();
             app.UseMvc();
         }
