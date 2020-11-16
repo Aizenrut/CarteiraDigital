@@ -48,9 +48,8 @@ namespace CarteiraDigital.ProvedorAutenticacao
 
             services.AddTransient<IUsuarioBuilder, UsuarioBuilder>();
             services.AddTransient<IOperacaoExpressao, OperacaoExpressao>();
-
             services.AddTransient<IContaRepositorio, ContaRepositorio>();
-
+            services.AddTransient<IConfiguracaoServico, ConfiguracaoServico>();
             services.AddTransient<ILoginServico, LoginServico>();
             services.AddTransient<IUsuarioServico, UsuarioServico>();
             services.AddTransient<IContaServico, ContaServico>();

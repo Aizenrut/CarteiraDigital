@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CarteiraDigital.Models
+﻿namespace CarteiraDigital.Models
 {
     public class CashIn : Operacao
     {
@@ -8,8 +6,8 @@ namespace CarteiraDigital.Models
         {
         }
 
-        public CashIn(decimal valor, string descricao, decimal saldoAnterior)
-            : base(valor, descricao, saldoAnterior)
+        public CashIn(int contaId, decimal valor, string descricao, decimal saldoAnterior)
+            : base(contaId, valor, descricao, saldoAnterior)
         {
         }
     }

@@ -8,8 +8,8 @@
         {
         }
 
-        public Transferencia(decimal valor, string descricao, decimal saldoAnterior, TipoMovimentacao tipoMovimentacao)
-            : base(valor, descricao, saldoAnterior)
+        public Transferencia(int contaId, decimal valor, string descricao, decimal saldoAnterior, TipoMovimentacao tipoMovimentacao)
+            : base(contaId, valor, descricao, saldoAnterior)
         {
             TipoMovimentacao = tipoMovimentacao;
         }

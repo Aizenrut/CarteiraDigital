@@ -1,4 +1,5 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
+using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -17,7 +18,10 @@ namespace CarteiraDigital.Servicos.Testes
             var valor = 10m;
             var descricao = "Teste unitário.";
 
-            var cashOutServico = new CashOutServico(null, null, null);
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterPercentualTaxa().Returns(0.01m);
+
+            var cashOutServico = new CashOutServico(null, null, null, configuracaoServico, null);
 
             // Act
             var result = cashOutServico.GerarCashOut(conta, valor, descricao);
@@ -55,14 +59,22 @@ namespace CarteiraDigital.Servicos.Testes
             var contaServico = new ContaServico(contaRepositorio);
             var operacaoServico = new OperacaoServico();
 
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterPercentualTaxa().Returns(0.01m);
+
+            var transacaoServico = Substitute.For<ITransacaoServico>();
+            transacaoServico.GerarNova().Returns(transacaoServico);
+
             var dto = new OperacaoUnariaDto(conta.Id, valor, descricao);
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico);
 
             // Act
             cashOutServico.Efetivar(dto);
 
             // Assert
+            transacaoServico.Received(1).GerarNova();
+            transacaoServico.Received(1).Finalizar();
             Assert.IsNotNull(cashOutGerado);
             Assert.AreEqual(valor, cashOutGerado.Valor);
             Assert.AreEqual(0.1m, cashOutGerado.ValorTaxa);
@@ -91,9 +103,12 @@ namespace CarteiraDigital.Servicos.Testes
             var contaServico = new ContaServico(contaRepositorio);
             var operacaoServico = new OperacaoServico();
 
+            var transacaoServico = Substitute.For<ITransacaoServico>();
+            transacaoServico.GerarNova().Returns(transacaoServico);
+
             var dto = new OperacaoUnariaDto(conta.Id, valor, descricao);
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, null, transacaoServico);
 
             // Act
             Action acao = () => cashOutServico.Efetivar(dto);
@@ -101,6 +116,8 @@ namespace CarteiraDigital.Servicos.Testes
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
+            transacaoServico.Received(0).GerarNova();
+            transacaoServico.Received(0).Finalizar();
             Assert.IsNull(cashOutGerado);
             cashOutRepositorio.Received(0).Post(Arg.Any<CashOut>());
             Assert.AreEqual(0, conta.CashOuts.Count);
@@ -126,9 +143,15 @@ namespace CarteiraDigital.Servicos.Testes
             var contaServico = new ContaServico(contaRepositorio);
             var operacaoServico = new OperacaoServico();
 
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterPercentualTaxa().Returns(0.01m);
+
+            var transacaoServico = Substitute.For<ITransacaoServico>();
+            transacaoServico.GerarNova().Returns(transacaoServico);
+
             var dto = new OperacaoUnariaDto(conta.Id, valor, descricao);
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico);
 
             // Act
             Action acao = () => cashOutServico.Efetivar(dto);
@@ -136,6 +159,8 @@ namespace CarteiraDigital.Servicos.Testes
             // Assert
             var excecao = Assert.ThrowsException<ArgumentException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
+            transacaoServico.Received(1).GerarNova();
+            transacaoServico.Received(0).Finalizar();
             Assert.IsNull(cashOutGerado);
             cashOutRepositorio.Received(0).Post(Arg.Any<CashOut>());
             Assert.AreEqual(0, conta.CashOuts.Count);

@@ -1,11 +1,9 @@
 ﻿using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.ProvedorAutenticacao.Servicos;
 using CarteiraDigital.Servicos;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
-using System.Collections.Generic;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
 {
@@ -52,40 +50,65 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
         }
 
         [TestMethod]
-        public void ObterIdadeMinima_RegiaoSemIdadeCadastrada_DeveRetornarZero()
-        {
-            // Arrange
-            var configurationSection = Substitute.For<IConfigurationSection>();
-            configurationSection.GetSection("IdadeMinima").Returns(configurationSection);
-            configurationSection.GetChildren().Returns(new List<IConfigurationSection> { configurationSection });
-
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.GetSection("Usuarios").Returns(configurationSection);
-
-            var usuarioServico = new UsuarioServico(null, null, null, null, configurationSection);
-
-            // Act
-            var resultado = usuarioServico.ObterIdadeMinima();
-
-            // Assert
-            Assert.AreEqual(0, resultado);
-        }
-
-        [TestMethod]
         public void PossuiIdadeMinima_RegiaoSemIdadeCadastrada_DeveRetornarTrue()
         {
             // Arrange
-            var configurationSection = Substitute.For<IConfigurationSection>();
-            configurationSection.GetSection("IdadeMinima").Returns(configurationSection);
-            configurationSection.GetChildren().Returns(new List<IConfigurationSection> { configurationSection });
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
 
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.GetSection("Usuarios").Returns(configurationSection);
-
-            var usuarioServico = new UsuarioServico(null, null, null, null, configurationSection);
+            var usuarioServico = new UsuarioServico(null, null, null, null, configuracaoServico);
 
             // Act
             var resultado = usuarioServico.PossuiIdadeMinima(new Usuario());
+
+            // Assert
+            Assert.IsTrue(resultado);
+        }
+
+        [TestMethod]
+        public void PossuiIdadeMinima_RegiaoComIdadeCadastrada_DeveRetornarFalse()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns((byte)18);
+
+            var usuarioServico = new UsuarioServico(null, null, null, null, configuracaoServico);
+
+            // Act
+            var resultado = usuarioServico.PossuiIdadeMinima(new Usuario() { DataNascimento = DateTime.Now.AddDays(-365) });
+
+            // Assert
+            Assert.IsFalse(resultado);
+        }
+
+        [TestMethod]
+        public void PossuiIdadeMinima_UsuarioComIdadeIgualAMinima_DeveRetornarTrue()
+        {
+            // Arrange
+            byte idade = 18;
+
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns(idade);
+
+            var usuarioServico = new UsuarioServico(null, null, null, null, configuracaoServico);
+
+            // Act
+            var resultado = usuarioServico.PossuiIdadeMinima(new Usuario() { DataNascimento = DateTime.Now.AddDays(-idade * 365) });
+
+            // Assert
+            Assert.IsTrue(resultado);
+        }
+
+        [TestMethod]
+        public void PossuiIdadeMinima_UsuarioComIdadeSuperiorAMinima_DeveRetornarTrue()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns((byte)18);
+
+            var usuarioServico = new UsuarioServico(null, null, null, null, configuracaoServico);
+
+            // Act
+            var resultado = usuarioServico.PossuiIdadeMinima(new Usuario() { DataNascimento = DateTime.Now.AddDays(-20 * 365) });
 
             // Assert
             Assert.IsTrue(resultado);
@@ -109,23 +132,59 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
         }
 
         [TestMethod]
-        public void ValidarUsuario_CpfValidoSemIdadeMinima_NaoDeveLancarExcecao()
+        public void ValidarUsuario_CpfValidoEIdadeInferiorAMinima_DeveLancarExcecao()
         {
             // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns((byte)18);
+
             var validadorDocumentos = Substitute.For<IValidacaoDocumentosServico>();
             validadorDocumentos.EhCpfValido(Arg.Any<string>()).Returns(true);
 
-            var configurationSection = Substitute.For<IConfigurationSection>();
-            configurationSection.GetSection("IdadeMinima").Returns(configurationSection);
-            configurationSection.GetChildren().Returns(new List<IConfigurationSection> { configurationSection });
+            var usuarioServico = new UsuarioServico(null, null, null, validadorDocumentos, configuracaoServico);
 
-            var configuration = Substitute.For<IConfiguration>();
-            configuration.GetSection("Usuarios").Returns(configurationSection);
+            // Act
+            Action acao = () => usuarioServico.ValidarUsuario(new Usuario() { DataNascimento = DateTime.Now.AddDays(-365) });
 
-            var usuarioServico = new UsuarioServico(null, null, null, validadorDocumentos, configuration);
+            // Assert
+            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("Não possui a idade mínima para cadastro (18 anos)!"));
+        }
+
+        [TestMethod]
+        public void ValidarUsuario_CpfValidoEIdadeIgualAMinima_DevePermitir()
+        {
+            // Arrange
+            byte idade = 18;
+
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns(idade);
+
+            var validadorDocumentos = Substitute.For<IValidacaoDocumentosServico>();
+            validadorDocumentos.EhCpfValido(Arg.Any<string>()).Returns(true);
+
+            var usuarioServico = new UsuarioServico(null, null, null, validadorDocumentos, configuracaoServico);
 
             // Act and Assert
-            usuarioServico.ValidarUsuario(new Usuario());
+            usuarioServico.ValidarUsuario(new Usuario() { DataNascimento = DateTime.Now.AddDays(-idade * 365) });
+        }
+
+        [TestMethod]
+        public void ValidarUsuario_CpfValidoEIdadeSuperiorAMinima_DevePermitir()
+        {
+            // Arrange
+            byte idade = 18;
+
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterIdadeMinima().Returns(idade);
+
+            var validadorDocumentos = Substitute.For<IValidacaoDocumentosServico>();
+            validadorDocumentos.EhCpfValido(Arg.Any<string>()).Returns(true);
+
+            var usuarioServico = new UsuarioServico(null, null, null, validadorDocumentos, configuracaoServico);
+
+            // Act and Assert
+            usuarioServico.ValidarUsuario(new Usuario() { DataNascimento = DateTime.Now.AddDays(-idade * 365) });
         }
     }
 }

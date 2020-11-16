@@ -8,8 +8,8 @@
         {
         }
 
-        public CashOut(decimal valor, string descricao, decimal saldoAnterior, decimal valorTaxa) 
-            : base(valor, descricao, saldoAnterior)
+        public CashOut(int contaId, decimal valor, string descricao, decimal saldoAnterior, decimal valorTaxa) 
+            : base(contaId, valor, descricao, saldoAnterior)
         {
             ValorTaxa = valorTaxa;
         }

@@ -43,7 +43,7 @@ namespace CarteiraDigital.Servicos
         public void TransferirPeloTipo(int contaId, decimal valor, string descricao,  TipoMovimentacao tipoTransferencia)
         {
             var conta = contaServico.ObterConta(contaId);
-            var transferencia = new Transferencia(valor, descricao, conta.Saldo, tipoTransferencia);
+            var transferencia = new Transferencia(contaId, valor, descricao, conta.Saldo, tipoTransferencia);
 
             realizarOperacaoPeloTipo[(int)tipoTransferencia](conta, valor);
             transferenciaRepositorio.Post(transferencia);

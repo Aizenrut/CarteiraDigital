@@ -5,6 +5,7 @@ namespace CarteiraDigital.Dados.Servicos
     public class TransacaoServico : ITransacaoServico
     {
         private readonly CarteiraDigitalContext context;
+        private bool aberta;
         private bool finalizada;
 
         public TransacaoServico(CarteiraDigitalContext context)
@@ -15,6 +16,7 @@ namespace CarteiraDigital.Dados.Servicos
         public ITransacaoServico GerarNova()
         {
             context.Database.BeginTransaction();
+            aberta = true;
             return this;
         }
 
@@ -25,10 +27,15 @@ namespace CarteiraDigital.Dados.Servicos
 
         public void Dispose()
         {
-            if (finalizada)
-                context.Database.CommitTransaction();
-            else
-                context.Database.RollbackTransaction();
+            if (aberta)
+            {
+                if (finalizada)
+                    context.Database.CommitTransaction();
+                else
+                    context.Database.RollbackTransaction();
+
+                aberta = false;
+            }
         }
     }
 }

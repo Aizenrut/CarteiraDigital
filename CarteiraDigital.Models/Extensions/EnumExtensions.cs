@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CarteiraDigital.Models.Extensions
+namespace CarteiraDigital.Models
 {
     public static class EnumExtensions
     {

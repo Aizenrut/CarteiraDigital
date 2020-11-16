@@ -19,15 +19,25 @@ namespace CarteiraDigital.Servicos
             contaRepositorio.Post(conta);
         }
 
+        public int ObterIdPeloTitular(string usuarioTitular)
+        {
+            return contaRepositorio.ObterIdPeloTitular(usuarioTitular);
+        }
+
+        public decimal ObterSaldoAtual(int contaId)
+        {
+            return contaRepositorio.ObterSaldoAtual(contaId);
+        }
+
         public Conta ObterConta(int contaId)
         {
             ValidarConta(contaId);
             return contaRepositorio.Get(contaId);
         }
 
-        public void ObterMovimentacao(int contaId, DateTime dataInicial, DateTime dataFinal)
+        public MovimentacaoDto ObterMovimentacao(int contaId, DateTime dataInicial, DateTime dataFinal)
         {
-
+            return contaRepositorio.ObterMovimentacao(contaId, dataInicial, dataFinal);
         }
 
         public void ValidarConta(int contaId)

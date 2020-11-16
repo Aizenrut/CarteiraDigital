@@ -4,10 +4,10 @@ namespace CarteiraDigital.Models.Enumeracoes
 {
     public enum TipoOperacao
     {
-        [Description("CashIn")]
+        [Description("Cash-in")]
         CashIn,
 
-        [Description("CashOut")]
+        [Description("Cash-out")]
         CashOut,
 
         [Description("Transferência")]

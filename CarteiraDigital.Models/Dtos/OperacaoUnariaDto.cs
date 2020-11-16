@@ -6,11 +6,9 @@ namespace CarteiraDigital.Models
     {
         [Required]
         public int ContaId { get; set; }
-
         [Required]
         [DataType(DataType.Currency)]
         public decimal Valor { get; set; }
-
         public string Descricao { get; set; }
 
         public OperacaoUnariaDto(int contaId, decimal valor, string descricao)

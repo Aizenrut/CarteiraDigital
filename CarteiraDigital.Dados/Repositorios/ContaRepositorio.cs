@@ -17,7 +17,7 @@ namespace CarteiraDigital.Dados.Repositorios
             this.operacaoExpressao = operacaoExpressao;
         }
 
-        public int ObterContaDoTitular(string usuarioTitular)
+        public int ObterIdPeloTitular(string usuarioTitular)
         {
             return context.Contas.Where(x => x.UsuarioTitular == usuarioTitular)
                                  .Select(x => x.Id)
@@ -81,11 +81,11 @@ namespace CarteiraDigital.Dados.Repositorios
                                            .Select(cashIn => new OperacaoDto
                                            {
                                                Data = cashIn.Data,
-                                               Status = cashIn.Status,
+                                               TipoOperacao = TipoOperacao.CashIn,
                                                Valor = cashIn.Valor,
                                                Descricao = cashIn.Descricao,
+                                               Status = cashIn.Status,
                                                TipoMovimentacao = TipoMovimentacao.Entrada,
-                                               TipoOperacao = TipoOperacao.CashIn,
                                                SaldoAnterior = cashIn.SaldoAnterior,
                                                Erro = cashIn.Erro
                                            })
@@ -93,11 +93,11 @@ namespace CarteiraDigital.Dados.Repositorios
                                                           .Select(cashOut => new OperacaoDto
                                                           {
                                                               Data = cashOut.Data,
-                                                              Status = cashOut.Status,
+                                                              TipoOperacao = TipoOperacao.CashOut,
                                                               Valor = cashOut.Valor,
                                                               Descricao = cashOut.Descricao,
+                                                              Status = cashOut.Status,
                                                               TipoMovimentacao = TipoMovimentacao.Saida,
-                                                              TipoOperacao = TipoOperacao.CashOut,
                                                               SaldoAnterior = cashOut.SaldoAnterior,
                                                               Erro = cashOut.Erro
                                                           })
@@ -105,20 +105,20 @@ namespace CarteiraDigital.Dados.Repositorios
                                                                 .Select(transferencia => new OperacaoDto
                                                                 {
                                                                     Data = transferencia.Data,
-                                                                    Status = transferencia.Status,
+                                                                    TipoOperacao = TipoOperacao.Transferencia,
                                                                     Valor = transferencia.Valor,
                                                                     Descricao = transferencia.Descricao,
+                                                                    Status = transferencia.Status,
                                                                     TipoMovimentacao = transferencia.TipoMovimentacao,
-                                                                    TipoOperacao = TipoOperacao.Transferencia,
                                                                     SaldoAnterior = transferencia.SaldoAnterior,
                                                                     Erro = transferencia.Erro
                                                                 })))
                                     .OrderByDescending(x => x.Data)
                                     .ToList();
 
-            var operacoesEfetivadas = operacoes.Where(operacaoExpressao.Efetivada());
+            var operacoesEfetivadas = operacoes.Where(operacaoExpressao.Efetivada()).ToList();
 
-            return new MovimentacaoDto(ObterSaldoAtual(contaId), ObterSaldoFinal(operacoes), ObterSaldoInicial(operacoes), operacoes);
+            return new MovimentacaoDto(ObterSaldoAtual(contaId), ObterSaldoFinal(operacoesEfetivadas), ObterSaldoInicial(operacoesEfetivadas), operacoes);
         }
     }
 }

@@ -4,8 +4,6 @@ using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.Servicos;
 using CarteiraDigital.ProvedorAutenticacao.Builders;
 using System;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Servicos
 {
@@ -15,19 +13,19 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
         private readonly IContaServico contaServico;
         private readonly IUsuarioBuilder usuarioBuilder;
         private readonly IValidacaoDocumentosServico validadorDocumentos;
-        private readonly IConfiguration configuracao;
+        private readonly IConfiguracaoServico configuracaoServico;
 
         public UsuarioServico(UserManager<Usuario> userManager,
                               IContaServico contaServico,
                               IUsuarioBuilder usuarioBuilder,
                               IValidacaoDocumentosServico validadorDocumentos,
-                              IConfiguration configuracao)
+                              IConfiguracaoServico configuracaoServico)
         {
             this.userManager = userManager;
             this.contaServico = contaServico;
             this.usuarioBuilder = usuarioBuilder;
             this.validadorDocumentos = validadorDocumentos;
-            this.configuracao = configuracao;
+            this.configuracaoServico = configuracaoServico;
         }
 
         public async Task<Usuario> ObterPeloNomeAsync(string nomeUsuario)
@@ -59,7 +57,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
             var resultado = await userManager.CreateAsync(usuario, cadastro.Senha);
 
             if (resultado.Succeeded)
-                contaServico.Cadastrar(usuario.Nome);
+                contaServico.Cadastrar(usuario.UserName);
             
             return resultado;
         }
@@ -77,20 +75,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
 
         public bool PossuiIdadeMinima(Usuario usuario)
         {
-            return (DateTime.Now - usuario.DataNascimento).Days >= ObterIdadeMinima() * 365;
-        }
-
-        public int ObterIdadeMinima()
-        {
-            var regiaoAtual = System.Globalization.RegionInfo.CurrentRegion.ThreeLetterISORegionName;
-            var idadeMinimaSection = configuracao.GetSection("Usuario")
-                                                 .GetSection("IdadeMinima");
-            var idadeMinima = 0;
-
-            if (idadeMinimaSection.GetChildren().Any(x => x.Key.Equals(regiaoAtual, StringComparison.InvariantCultureIgnoreCase)))
-                idadeMinima = Convert.ToInt32(idadeMinimaSection[regiaoAtual]);
-
-            return idadeMinima;
+            return (DateTime.Now - usuario.DataNascimento).Days >= configuracaoServico.ObterIdadeMinima() * 365;
         }
 
         public void ValidarUsuario(Usuario usuario)
@@ -99,7 +84,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
                 throw new ArgumentException("O CPF informado é inválido!");
 
             if (!PossuiIdadeMinima(usuario))
-                throw new ArgumentException($"Não possui a idade mínima para cadastro ({ ObterIdadeMinima() } anos)!");
+                throw new ArgumentException($"Não possui a idade mínima para cadastro ({ configuracaoServico.ObterIdadeMinima() } anos)!");
         }
     }
 }

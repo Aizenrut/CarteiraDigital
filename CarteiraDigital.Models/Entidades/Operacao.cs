@@ -5,6 +5,7 @@ namespace CarteiraDigital.Models
     public abstract class Operacao : Entidade
     {
         public int ContaId { get; set; }
+        public Conta Conta { get; set; }
         public decimal Valor { get; set; }
         public string Descricao { get; set; }
         public DateTime Data { get; set; }
@@ -16,8 +17,9 @@ namespace CarteiraDigital.Models
         {
         }
 
-        protected Operacao(decimal valor, string descricao, decimal saldoAnterior)
+        protected Operacao(int contaId, decimal valor, string descricao, decimal saldoAnterior)
         {
+            ContaId = contaId;
             Valor = valor;
             Descricao = descricao;
             Data = DateTime.Now;
