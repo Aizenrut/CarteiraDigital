@@ -31,7 +31,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
             operacaoServico.Received(0).Debitar(Arg.Any<Conta>(), valor);
             transferenciaRepositorio.Received(0).Post(Arg.Any<Transferencia>());
@@ -61,7 +61,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             transferenciaRepositorio.Received(0).Post(Arg.Any<Transferencia>());
             contaRepositorio.Received(0).Update(Arg.Any<Conta>());
@@ -90,7 +90,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.TransferirPeloTipo(1, valor, "Teste unitário.", TipoMovimentacao.Saida);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O saldo da conta é insuficiente para realizar a operação!"));
             transferenciaRepositorio.Received(0).Post(Arg.Any<Transferencia>());
             contaRepositorio.Received(0).Update(Arg.Any<Conta>());
@@ -259,7 +259,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();
@@ -304,7 +304,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();
@@ -348,7 +348,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();
@@ -384,7 +384,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();
@@ -424,7 +424,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => transferenciaServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O saldo da conta é insuficiente para realizar a operação!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();

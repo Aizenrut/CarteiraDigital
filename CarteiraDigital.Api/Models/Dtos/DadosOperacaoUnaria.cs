@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CarteiraDigital.Models
+namespace CarteiraDigital.Api.Models
 {
     public struct DadosOperacaoUnaria
     {

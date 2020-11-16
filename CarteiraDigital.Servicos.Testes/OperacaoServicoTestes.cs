@@ -82,7 +82,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.ValidarValor(-1);
 
             //Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
         }
 
@@ -96,7 +96,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.ValidarValor(0);
 
             //Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
         }
 
@@ -120,7 +120,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.ValidarSaldo(new Conta(), 10);
 
             //Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O saldo da conta é insuficiente para realizar a operação!"));
         }
 
@@ -173,7 +173,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.Creditar(conta, valor);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             Assert.AreEqual(0, conta.Saldo);
         }
@@ -205,7 +205,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.Debitar(conta, 100);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O saldo da conta é insuficiente para realizar a operação!"));
             Assert.AreEqual(10, conta.Saldo);
         }
@@ -222,7 +222,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.Debitar(conta, -1);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             Assert.AreEqual(100, conta.Saldo);
         }
@@ -239,7 +239,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.ValidarArgumentoTemplate(true, mensagem);
 
             //Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains(mensagem));
         }
 
@@ -270,7 +270,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => operacaoServico.AlterarValoresTemplate(conta, -1, acaoPrincipal);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             Assert.AreEqual(1, conta.Saldo);
         }

@@ -65,7 +65,7 @@ namespace CarteiraDigital.Servicos
         public void ValidarArgumentoTemplate(bool condicao, string mensagem)
         {
             if (condicao)
-                throw new ArgumentException(mensagem);
+                throw new CarteiraDigitalException(mensagem);
         }
     }
 }

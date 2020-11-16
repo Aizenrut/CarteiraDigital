@@ -27,7 +27,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => contaServico.ValidarConta(contaId);
 
             //Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
         }
 

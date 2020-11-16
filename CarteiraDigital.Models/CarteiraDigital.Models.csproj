@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Dtos\ErroDto.cs~RF4f1ab0c.TMP" />
+  </ItemGroup>
+
 </Project>

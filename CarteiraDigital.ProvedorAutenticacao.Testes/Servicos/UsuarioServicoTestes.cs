@@ -127,7 +127,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
             Action acao = () => usuarioServico.ValidarUsuario(new Usuario());
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O CPF informado é inválido!"));
         }
 
@@ -147,7 +147,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
             Action acao = () => usuarioServico.ValidarUsuario(new Usuario() { DataNascimento = DateTime.Now.AddDays(-365) });
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("Não possui a idade mínima para cadastro (18 anos)!"));
         }
 

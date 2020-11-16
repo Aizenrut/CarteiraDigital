@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarteiraDigital.Models.Extensions;
+using System;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Models
 {
@@ -6,15 +7,15 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
     {
         public string Usuario { get; set; }
         public string Token { get; }
-        public DateTime DataEmissao { get; }
-        public DateTime DataExpiracao { get; }
+        public string DataEmissao { get; }
+        public string DataExpiracao { get; }
 
         public TokenDto(string usuario, string token, DateTime dataEmissao, DateTime dataExpiracao)
         {
             Usuario = usuario;
             Token = token;
-            DataEmissao = dataEmissao;
-            DataExpiracao = dataExpiracao;
+            DataEmissao = dataEmissao.ParaData();
+            DataExpiracao = dataExpiracao.ParaData();
         }
     }
 }

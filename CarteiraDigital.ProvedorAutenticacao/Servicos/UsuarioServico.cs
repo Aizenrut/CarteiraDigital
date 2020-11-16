@@ -4,6 +4,7 @@ using CarteiraDigital.ProvedorAutenticacao.Models;
 using CarteiraDigital.Servicos;
 using CarteiraDigital.ProvedorAutenticacao.Builders;
 using System;
+using CarteiraDigital.Models;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Servicos
 {
@@ -81,10 +82,10 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
         public void ValidarUsuario(Usuario usuario)
         {
             if (!validadorDocumentos.EhCpfValido(usuario.Cpf))
-                throw new ArgumentException("O CPF informado é inválido!");
+                throw new CarteiraDigitalException("O CPF informado é inválido!");
 
             if (!PossuiIdadeMinima(usuario))
-                throw new ArgumentException($"Não possui a idade mínima para cadastro ({ configuracaoServico.ObterIdadeMinima() } anos)!");
+                throw new CarteiraDigitalException($"Não possui a idade mínima para cadastro ({ configuracaoServico.ObterIdadeMinima() } anos)!");
         }
     }
 }

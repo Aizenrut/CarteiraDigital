@@ -1,4 +1,5 @@
-﻿using CarteiraDigital.Api.Servicos;
+﻿using CarteiraDigital.Api.Models;
+using CarteiraDigital.Api.Servicos;
 using CarteiraDigital.Models;
 using CarteiraDigital.Servicos;
 using Microsoft.AspNetCore.Authorization;
@@ -24,11 +25,14 @@ namespace CarteiraDigital.Api.Controllers
             this.requisicaoServico = requisicaoServico;
         }
 
+        /// <summary>
+        /// Gera uma operação de cash-in.
+        /// </summary>
         [HttpPost]
         public IActionResult GerarCashIn(DadosOperacaoUnaria dados)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ErroRespostaDto.Para(ModelState));
 
             var token = Request.Headers[HeaderNames.Authorization];
             var contaId = requisicaoServico.ObterContaDoCliente(token);

@@ -43,7 +43,7 @@ namespace CarteiraDigital.Servicos
         public void ValidarConta(int contaId)
         {
             if(!contaRepositorio.Any(contaId))
-                throw new ArgumentException("A conta informada é inválida!");
+                throw new CarteiraDigitalException("A conta informada é inválida!");
         }
 
         public void VincularCashIn(Conta conta, CashIn cashIn)

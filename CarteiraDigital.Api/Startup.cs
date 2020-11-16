@@ -1,16 +1,21 @@
+using CarteiraDigital.Api.Models;
 using CarteiraDigital.Api.Servicos;
 using CarteiraDigital.Dados.Contexts;
 using CarteiraDigital.Dados.Expressoes;
 using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Servicos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 
 namespace CarteiraDigital.Api
@@ -26,7 +31,17 @@ namespace CarteiraDigital.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => 
+            {
+                options.EnableEndpointRouting = false;
+                options.Filters.Add<ErroRespostaFilter>();
+            });
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddApiVersioning();
 
             services.AddDbContext<CarteiraDigitalContext>(options =>
@@ -74,10 +89,43 @@ namespace CarteiraDigital.Api
             services.AddTransient<ITransferenciaServico, TransferenciaServico>();
             services.AddTransient<IContaServico, ContaServico>();
             services.AddTransient<IValidacaoDocumentosServico, ValidacaoDocumentosServico>();
+
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1.0", new OpenApiInfo
+                {
+                    Title = "API da Carteira Digital",
+                    Version = "1.0",
+                    Description = "API utilizada para realizar operações da Carteira Digital."
+                });
+
+                options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Autenticação utilizando o esquema Bearer. Ex.: Bearer {token}",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    BearerFormat = "JWT"
+                });
+
+                options.OperationFilter<AdicionarAutenticacaoOperationFilter>();
+
+                var arquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var caminho = Path.Combine(AppContext.BaseDirectory, arquivo);
+                options.IncludeXmlComments(caminho);
+            });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/Swagger/v1.0/swagger.json", "Versão 1.0");
+                options.RoutePrefix = string.Empty;
+            });
+
             app.UseApiVersioning();
             app.UseAuthentication();
             app.UseMvc();

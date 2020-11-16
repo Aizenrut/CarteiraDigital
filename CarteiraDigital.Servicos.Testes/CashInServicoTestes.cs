@@ -212,7 +212,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => cashInServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A conta informada é inválida!"));
             transacaoServico.Received(0).GerarNova();
             transacaoServico.Received(0).Finalizar();
@@ -253,7 +253,7 @@ namespace CarteiraDigital.Servicos.Testes
             Action acao = () => cashInServico.Efetivar(dto);
 
             // Assert
-            var excecao = Assert.ThrowsException<ArgumentException>(acao);
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O valor da operação deve ser superior a zero!"));
             transacaoServico.Received(1).GerarNova();
             transacaoServico.Received(0).Finalizar();

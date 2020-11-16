@@ -1,4 +1,5 @@
-﻿using CarteiraDigital.Api.Servicos;
+﻿using CarteiraDigital.Api.Models;
+using CarteiraDigital.Api.Servicos;
 using CarteiraDigital.Models;
 using CarteiraDigital.Servicos;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,12 @@ namespace CarteiraDigital.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
+    [Consumes("application/json", "text/json")]
+    [Produces("application/json", "text/json")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErroRespostaDto))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErroRespostaDto))]
     public class TransferenciasController : ControllerBase
     {
         private readonly ITransferenciaServico transferenciaServico;
@@ -27,11 +34,14 @@ namespace CarteiraDigital.Api.Controllers
             this.contaServico = contaServico;
         }
 
+        /// <summary>
+        /// Gera uma operação de transferência para um determinado usuário.
+        /// </summary>
         [HttpPost]
         public IActionResult GerarTransferencia(DadosOperacaoBinaria dados)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ErroRespostaDto.Para(ModelState));
 
             var token = Request.Headers[HeaderNames.Authorization];
             var contaOrigemId = requisicaoServico.ObterContaDoCliente(token);
