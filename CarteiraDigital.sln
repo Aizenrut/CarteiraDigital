@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.ProvedorAut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Dados.Testes", "CarteiraDigital.Dados.Testes\CarteiraDigital.Dados.Testes.csproj", "{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.Api", "CarteiraDigital.Api\CarteiraDigital.Api.csproj", "{E67074FD-2C9C-4B90-A60D-FE008309EB9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Api", "CarteiraDigital.Api\CarteiraDigital.Api.csproj", "{E67074FD-2C9C-4B90-A60D-FE008309EB9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
