@@ -15,8 +15,9 @@ namespace CarteiraDigital.Servicos
             AlterarStatusTemplate(operacao, StatusOperacao.Efetivada);
         }
 
-        public void MarcarComErro(Operacao operacao)
+        public void MarcarComErro(Operacao operacao, string erro)
         {
+            operacao.Erro = erro;
             AlterarStatusTemplate(operacao, StatusOperacao.ComErro);
         }
 

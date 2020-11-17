@@ -10,6 +10,8 @@ namespace CarteiraDigital.Servicos
         private readonly ITransferenciaRepositorio transferenciaRepositorio;
         private readonly IContaServico contaServico;
         private readonly ITransacaoServico transacaoServico;
+        private readonly IOperacaoServico operacaoServico;
+
 
         private readonly Action<Conta, decimal>[] realizarOperacaoPeloTipo;
 
@@ -21,6 +23,7 @@ namespace CarteiraDigital.Servicos
             this.transferenciaRepositorio = transferenciaRepositorio;
             this.contaServico = contaServico;
             this.transacaoServico = transacaoServico;
+            this.operacaoServico = operacaoServico;
 
             realizarOperacaoPeloTipo = new Action<Conta, decimal>[]
             {
@@ -29,25 +32,52 @@ namespace CarteiraDigital.Servicos
             };
         }
 
-        public void Efetivar(OperacaoBinariaDto dto)
+        public void Efetivar(EfetivarOperacaoBinariaDto dto)
         {
-            using (var transacao = transacaoServico.GerarNova())
-            {
-                TransferirPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
-                TransferirPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
+            var transferenciaSaida = transferenciaRepositorio.Get(dto.OperacaoSaidaId);
+            var transferenciaEntrada = transferenciaRepositorio.Get(dto.OperacaoEntradaId);
 
-                transacao.Finalizar();
+            try
+            {
+                using (var transacao = transacaoServico.GerarNova())
+                {
+                    Efetivar(transferenciaSaida);
+                    Efetivar(transferenciaEntrada);
+
+                    transacao.Finalizar();
+                }
             }
+            catch (CarteiraDigitalException e)
+            {
+                operacaoServico.MarcarComErro(transferenciaSaida, e.Message);
+                operacaoServico.MarcarComErro(transferenciaEntrada, e.Message);
+            }
+
+            transferenciaRepositorio.Update(transferenciaSaida, transferenciaEntrada);
         }
 
-        public void TransferirPeloTipo(int contaId, decimal valor, string descricao,  TipoMovimentacao tipoTransferencia)
+        public void Efetivar(Transferencia transferencia)
+        {
+            var conta = contaServico.ObterConta(transferencia.ContaId);
+
+            realizarOperacaoPeloTipo[(int)transferencia.TipoMovimentacao](conta, transferencia.Valor);
+            operacaoServico.MarcarEfetivada(transferencia);
+        }
+
+        public void Gerar(OperacaoBinariaDto dto)
+        {
+            GerarPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
+            GerarPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
+        }
+
+        public void GerarPeloTipo(int contaId, decimal valor, string descricao, TipoMovimentacao tipoTransferencia)
         {
             var conta = contaServico.ObterConta(contaId);
             var transferencia = new Transferencia(contaId, valor, descricao, conta.Saldo, tipoTransferencia);
 
-            realizarOperacaoPeloTipo[(int)tipoTransferencia](conta, valor);
-            transferenciaRepositorio.Post(transferencia);
+            operacaoServico.MarcarPendente(transferencia);
 
+            transferenciaRepositorio.Post(transferencia);
             contaServico.VincularTransferencia(conta, transferencia);
         }
     }

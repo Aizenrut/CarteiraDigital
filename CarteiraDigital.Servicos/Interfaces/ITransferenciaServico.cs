@@ -2,8 +2,8 @@
 
 namespace CarteiraDigital.Servicos
 {
-    public interface ITransferenciaServico : IOperacaoStrategy<OperacaoBinariaDto>
+    public interface ITransferenciaServico : IOperacaoStrategy<EfetivarOperacaoBinariaDto, OperacaoBinariaDto>
     {
-        void TransferirPeloTipo(int contaId, decimal valor, string descricao, TipoMovimentacao tipoTransferencia);
+        void GerarPeloTipo(int contaId, decimal valor, string descricao, TipoMovimentacao tipoTransferencia);
     }
 }

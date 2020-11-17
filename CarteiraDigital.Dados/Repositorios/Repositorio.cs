@@ -52,9 +52,9 @@ namespace CarteiraDigital.Dados.Repositorios
             context.SaveChanges();
         }
 
-        public void Delete(T entidade)
+        public void Update(params T[] entidades)
         {
-            context.Set<T>().Remove(entidade);
+            context.Set<T>().UpdateRange(entidades);
             context.SaveChanges();
         }
     }

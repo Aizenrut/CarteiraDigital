@@ -7,7 +7,7 @@ namespace CarteiraDigital.Servicos
     {
         void MarcarPendente(Operacao operacao);
         void MarcarEfetivada(Operacao operacao);
-        void MarcarComErro(Operacao operacao);
+        void MarcarComErro(Operacao operacao, string erro);
         void AlterarStatusTemplate(Operacao operacao, StatusOperacao novoStatus);
         void Creditar(Conta conta, decimal valor);
         void Debitar(Conta conta, decimal valor);

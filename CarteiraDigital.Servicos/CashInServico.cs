@@ -30,27 +30,47 @@ namespace CarteiraDigital.Servicos
             return !cashInRepositorio.Any(x => x.ContaId == contaId);
         }
 
-        public void Efetivar(OperacaoUnariaDto dto)
+        public void Efetivar(EfetivarOperacaoUnariaDto dto)
+        {
+            var cashIn = cashInRepositorio.Get(dto.OperacaoId);
+
+            try
+            {
+                var conta = contaServico.ObterConta(cashIn.ContaId);
+
+                using (var transacao = transacaoServico.GerarNova())
+                {
+                    operacaoServico.Creditar(conta, cashIn.Valor);
+                    operacaoServico.MarcarEfetivada(cashIn);
+
+                    transacao.Finalizar();
+                }
+            }
+            catch (CarteiraDigitalException e)
+            {
+                operacaoServico.MarcarComErro(cashIn, e.Message);
+            }
+
+            cashInRepositorio.Update(cashIn);
+        }
+
+        public void Gerar(OperacaoUnariaDto dto)
         {
             var conta = contaServico.ObterConta(dto.ContaId);
-            var cashIn = GerarCashIn(conta, dto.Valor, dto.Descricao);
+            decimal valor = ObterValorComBonificacao(conta.Id, dto.Valor);
 
-            using (var transacao = transacaoServico.GerarNova())
-            {
-                operacaoServico.Creditar(conta, cashIn.Valor);
-                cashInRepositorio.Post(cashIn);
-                contaServico.VincularCashIn(conta, cashIn);
+            var cashIn = new CashIn(conta.Id, valor, dto.Descricao, conta.Saldo);
 
-                transacao.Finalizar();
-            }
+            cashInRepositorio.Post(cashIn);
+            contaServico.VincularCashIn(conta, cashIn);
         }
 
-        public CashIn GerarCashIn(Conta conta, decimal valor, string descricao)
+        public decimal ObterValorComBonificacao(int contaId, decimal valor)
         {
-            if (EhPrimeiroCashIn(conta.Id))
-                valor *= 1 + configuracaoServico.ObterPercentualBonificacao();
+            if (EhPrimeiroCashIn(contaId))
+                return valor * (1 + configuracaoServico.ObterPercentualBonificacao());
 
-            return new CashIn(conta.Id, valor, descricao, conta.Saldo);
-        }
+            return valor;
+        } 
     }
 }

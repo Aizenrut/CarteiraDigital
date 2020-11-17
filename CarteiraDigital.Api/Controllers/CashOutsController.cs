@@ -37,7 +37,7 @@ namespace CarteiraDigital.Api.Controllers
             var token = Request.Headers[HeaderNames.Authorization];
             var contaId = requisicaoServico.ObterContaDoCliente(token);
 
-            cashOutServico.Efetivar(new OperacaoUnariaDto(contaId, dados.Valor, dados.Descricao));
+            cashOutServico.Gerar(new OperacaoUnariaDto(contaId, dados.Valor, dados.Descricao));
 
             var movimentacaoUri = Url.Action("ConsultarExtrato", "Contas", null, HttpContext.Request.Scheme);
             return Created(movimentacaoUri, null);

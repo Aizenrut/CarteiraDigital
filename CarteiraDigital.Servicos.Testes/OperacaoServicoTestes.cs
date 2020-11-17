@@ -42,17 +42,21 @@ namespace CarteiraDigital.Servicos.Testes
         public void MarcarComErro_OperacaoPendente_DeveAlterarOStatus()
         {
             // Arrange
+            var erro = "teste";
+
             var operacao = new CashIn
             {
                 Status = StatusOperacao.Pendente
             };
+
             var operacaoServico = new OperacaoServico();
 
             // Act
-            operacaoServico.MarcarComErro(operacao);
+            operacaoServico.MarcarComErro(operacao, erro);
 
             //Assert
             Assert.AreEqual(StatusOperacao.ComErro, operacao.Status);
+            Assert.AreEqual(erro, operacao.Erro);
         }
 
         [TestMethod]

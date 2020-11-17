@@ -2,9 +2,9 @@
 
 namespace CarteiraDigital.Servicos
 {
-    public interface ICashInServico : IOperacaoStrategy<OperacaoUnariaDto>
+    public interface ICashInServico : IOperacaoStrategy<EfetivarOperacaoUnariaDto, OperacaoUnariaDto>
     {
         bool EhPrimeiroCashIn(int contaId);
-        CashIn GerarCashIn(Conta conta, decimal valor, string descricao);
+        decimal ObterValorComBonificacao(int contaId, decimal valor);
     }
 }

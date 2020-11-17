@@ -25,25 +25,41 @@ namespace CarteiraDigital.Servicos
             this.transacaoServico = transacaoServico;
         }
 
-        public void Efetivar(OperacaoUnariaDto dto)
+        public void Efetivar(EfetivarOperacaoUnariaDto dto)
         {
-            var conta = contaServico.ObterConta(dto.ContaId);
-            var cashOut = GerarCashOut(conta, dto.Valor, dto.Descricao);
+            var cashOut = cashOutRepositorio.Get(dto.OperacaoId);
 
-            using (var transacao = transacaoServico.GerarNova())
+            try
             {
-                operacaoServico.Debitar(conta, cashOut.Valor + cashOut.ValorTaxa);
-                cashOutRepositorio.Post(cashOut);
-                contaServico.VincularCashOut(conta, cashOut);
+                var conta = contaServico.ObterConta(cashOut.ContaId);
 
-                transacao.Finalizar();
+                using (var transacao = transacaoServico.GerarNova())
+                {
+                    operacaoServico.Debitar(conta, cashOut.Valor + cashOut.ValorTaxa);
+                    operacaoServico.MarcarEfetivada(cashOut);
+
+                    transacao.Finalizar();
+                }
             }
+            catch (CarteiraDigitalException e)
+            {
+                operacaoServico.MarcarComErro(cashOut, e.Message);
+            }
+
+            cashOutRepositorio.Update(cashOut);
         }
 
-        public CashOut GerarCashOut(Conta conta, decimal valor, string descricao)
+        public void Gerar(OperacaoUnariaDto dto)
         {
-            var valorTaxa = valor * configuracaoServico.ObterPercentualTaxa();
-            return new CashOut(conta.Id, valor, descricao, conta.Saldo, valorTaxa);
+            var conta = contaServico.ObterConta(dto.ContaId);
+            var valorTaxa = dto.Valor * configuracaoServico.ObterPercentualTaxa();
+
+            var cashOut = new CashOut(conta.Id, dto.Valor, dto.Descricao, conta.Saldo, valorTaxa);
+
+            operacaoServico.MarcarPendente(cashOut);
+
+            cashOutRepositorio.Post(cashOut);
+            contaServico.VincularCashOut(conta, cashOut);
         }
     }
 }

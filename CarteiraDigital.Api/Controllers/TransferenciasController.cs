@@ -47,7 +47,7 @@ namespace CarteiraDigital.Api.Controllers
             var contaOrigemId = requisicaoServico.ObterContaDoCliente(token);
             var contaDestinoId = contaServico.ObterIdPeloTitular(dados.UsuarioDestino);
 
-            transferenciaServico.Efetivar(new OperacaoBinariaDto(contaOrigemId, contaDestinoId, dados.Valor, dados.Descricao));
+            transferenciaServico.Gerar(new OperacaoBinariaDto(contaOrigemId, contaDestinoId, dados.Valor, dados.Descricao));
 
             var movimentacaoUri = Url.Action("ConsultarExtrato", "Contas", null, HttpContext.Request.Scheme);
             return Created(movimentacaoUri, null);

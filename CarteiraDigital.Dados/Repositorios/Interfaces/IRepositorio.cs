@@ -10,6 +10,6 @@ namespace CarteiraDigital.Dados.Repositorios
         T Get(int id);
         void Post(T entidade);
         void Update(T entidade);
-        void Delete(T entidade);
+        void Update(params T[] entidades);
     }
 }
