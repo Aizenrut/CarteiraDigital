@@ -2,7 +2,7 @@
 
 namespace CarteiraDigital.Servicos
 {
-    public interface ICashOutServico : IOperacaoStrategy<EfetivarOperacaoUnariaDto, OperacaoUnariaDto>
+    public interface ICashOutServico : IOperacaoStrategy<CashOut, EfetivarOperacaoUnariaDto, OperacaoUnariaDto>
     {
     }
 }
