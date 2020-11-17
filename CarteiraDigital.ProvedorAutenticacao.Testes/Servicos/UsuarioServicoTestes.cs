@@ -38,7 +38,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
         }
 
         [TestMethod]
-        public void EhUsuarioValido_UsuarioAtivo_DeveRetornarFalse()
+        public void EhUsuarioValido_UsuarioAtivo_DeveRetornarTrue()
         {
             // Arrange
             var usuarioServico = new UsuarioServico(null, null, null, null, null);

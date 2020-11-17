@@ -16,7 +16,7 @@ namespace CarteiraDigital.Api.Servicos
 
         public int ObterContaDoCliente(string token)
         {
-            var usuario = jwtServico.ObterSubject(token.Replace("Bearer ", ""));
+            var usuario = jwtServico.ObterSubject(token);
             return contaServico.ObterIdPeloTitular(usuario);
         }
     }
