@@ -75,9 +75,9 @@ namespace CarteiraDigital.Servicos
         public decimal ObterBonificacao(int contaId, decimal valor)
         {
             if (EhPrimeiroCashIn(contaId))
-                return valor * (1 + configuracaoServico.ObterPercentualBonificacao());
+                return valor * configuracaoServico.ObterPercentualBonificacao();
 
-            return valor;
+            return 0;
         }
     }
 }

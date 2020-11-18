@@ -78,7 +78,8 @@ namespace CarteiraDigital.Servicos.Testes
 
             // Assert
             Assert.IsNotNull(cashInGerado);
-            Assert.AreEqual(11m, cashInGerado.Valor);
+            Assert.AreEqual(10m, cashInGerado.Valor);
+            Assert.AreEqual(1m, cashInGerado.ValorBonificacao);
             Assert.AreEqual(descricao, cashInGerado.Descricao);
             Assert.AreEqual(conta.Id, cashInGerado.ContaId);
             Assert.AreNotEqual(default, cashInGerado.Data);
