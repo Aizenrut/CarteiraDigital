@@ -243,7 +243,7 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void ObterValorComBonificacao_PrimeiroCashIn_DeveRetornarOValorComBonificacao()
+        public void ObterBonificacao_PrimeiroCashIn_DeveRetornarABonificacao()
         {
             // Arrange
             var contaId = 1;
@@ -257,14 +257,14 @@ namespace CarteiraDigital.Servicos.Testes
             var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null, null);
 
             // Act
-            var resultado = cashInServico.ObterValorComBonificacao(contaId, 10);
+            var resultado = cashInServico.ObterBonificacao(contaId, 10);
 
             // Assert
-            Assert.AreEqual(11, resultado);
+            Assert.AreEqual(1m, resultado);
         }
 
         [TestMethod]
-        public void ObterValorComBonificacao_SegundoCashIn_DeveRetornarOValorSemBonificacao()
+        public void ObterBonificacao_SegundoCashIn_DeveRetornarZero()
         {
             // Arrange
             var contaId = 1;
@@ -278,10 +278,10 @@ namespace CarteiraDigital.Servicos.Testes
             var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null, null);
 
             // Act
-            var resultado = cashInServico.ObterValorComBonificacao(contaId, 10);
+            var resultado = cashInServico.ObterBonificacao(contaId, 10);
 
             // Assert
-            Assert.AreEqual(10, resultado);
+            Assert.AreEqual(0, resultado);
         }
     }
 }

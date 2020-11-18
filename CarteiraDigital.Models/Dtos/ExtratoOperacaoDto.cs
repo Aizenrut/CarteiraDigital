@@ -7,6 +7,8 @@ namespace CarteiraDigital.Models.Dtos
         public string Data { get; set; }
         public string TipoOperacao { get; set; }
         public string Valor { get; set; }
+        public string ValorTaxa { get; set; }
+        public string ValorBonificacao { get; set; }
         public string Descricao { get; set; }
         public string Status { get; set; }
         public string TipoMovimentacao { get; set; }
@@ -20,6 +22,8 @@ namespace CarteiraDigital.Models.Dtos
                 Data = operacaoDto.Data.ParaData(),
                 TipoOperacao = operacaoDto.TipoOperacao.ObterDescricao(),
                 Valor = operacaoDto.Valor.ParaMoeda(),
+                ValorTaxa = operacaoDto.ValorTaxa.ParaMoeda(),
+                ValorBonificacao = operacaoDto.ValorBonificacao.ParaMoeda(),
                 Descricao = operacaoDto.Descricao,
                 Status = operacaoDto.Status.ObterDescricao(),
                 TipoMovimentacao = operacaoDto.TipoMovimentacao.ObterDescricao(),

@@ -45,7 +45,7 @@ namespace CarteiraDigital.Servicos
 
                 using (var transacao = transacaoServico.GerarNova())
                 {
-                    operacaoServico.Creditar(conta, cashIn.Valor);
+                    operacaoServico.Creditar(conta, cashIn.Valor + cashIn.ValorBonificacao);
                     operacaoServico.MarcarEfetivada(cashIn);
 
                     transacao.Finalizar();
@@ -62,9 +62,9 @@ namespace CarteiraDigital.Servicos
         public async Task Gerar(OperacaoUnariaDto dto)
         {
             var conta = contaServico.ObterConta(dto.ContaId);
-            decimal valor = ObterValorComBonificacao(conta.Id, dto.Valor);
+            var bonificacao = ObterBonificacao(conta.Id, dto.Valor);
 
-            var cashIn = new CashIn(conta.Id, valor, dto.Descricao, conta.Saldo);
+            var cashIn = new CashIn(conta.Id, dto.Valor, dto.Descricao, conta.Saldo, bonificacao);
 
             cashInRepositorio.Post(cashIn);
             contaServico.VincularCashIn(conta, cashIn);
@@ -72,7 +72,7 @@ namespace CarteiraDigital.Servicos
             await produtorClient.EnfileirarCashIn(new EfetivarOperacaoUnariaDto(cashIn.Id));
         }
 
-        public decimal ObterValorComBonificacao(int contaId, decimal valor)
+        public decimal ObterBonificacao(int contaId, decimal valor)
         {
             if (EhPrimeiroCashIn(contaId))
                 return valor * (1 + configuracaoServico.ObterPercentualBonificacao());

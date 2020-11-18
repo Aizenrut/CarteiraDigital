@@ -11,6 +11,9 @@ namespace CarteiraDigital.Dados.Configuracoes
             builder.Property(cashIn => cashIn.Valor)
                    .HasColumnType("MONEY");
 
+            builder.Property(cashIn => cashIn.ValorBonificacao)
+                   .HasColumnType("MONEY");
+
             builder.Property(cashIn => cashIn.SaldoAnterior)
                    .HasColumnType("MONEY");
 

@@ -8,6 +8,8 @@ namespace CarteiraDigital.Models
         public DateTime Data { get; set; }
         public TipoOperacao TipoOperacao { get; set; }
         public decimal Valor { get; set; }
+        public decimal ValorTaxa { get; set; }
+        public decimal ValorBonificacao { get; set; }
         public string Descricao { get; set; }
         public StatusOperacao Status { get; set; }
         public TipoMovimentacao TipoMovimentacao { get; set; }

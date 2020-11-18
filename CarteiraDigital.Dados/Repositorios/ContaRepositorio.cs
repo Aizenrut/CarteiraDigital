@@ -44,9 +44,9 @@ namespace CarteiraDigital.Dados.Repositorios
                 decimal saldoFinal = operacaoDoTopo.SaldoAnterior;
 
                 if (operacoes.First().TipoMovimentacao == TipoMovimentacao.Entrada)
-                    saldoFinal += operacaoDoTopo.Valor;
+                    saldoFinal += operacaoDoTopo.Valor + operacaoDoTopo.ValorBonificacao;
                 else
-                    saldoFinal -= operacaoDoTopo.Valor;
+                    saldoFinal -= operacaoDoTopo.Valor - operacaoDoTopo.ValorTaxa;
 
                 return saldoFinal;
             };
@@ -83,6 +83,8 @@ namespace CarteiraDigital.Dados.Repositorios
                                                Data = cashIn.Data,
                                                TipoOperacao = TipoOperacao.CashIn,
                                                Valor = cashIn.Valor,
+                                               ValorTaxa = 0m,
+                                               ValorBonificacao = cashIn.ValorBonificacao,
                                                Descricao = cashIn.Descricao,
                                                Status = cashIn.Status,
                                                TipoMovimentacao = TipoMovimentacao.Entrada,
@@ -95,6 +97,8 @@ namespace CarteiraDigital.Dados.Repositorios
                                                               Data = cashOut.Data,
                                                               TipoOperacao = TipoOperacao.CashOut,
                                                               Valor = cashOut.Valor,
+                                                              ValorTaxa = cashOut.ValorTaxa,
+                                                              ValorBonificacao = 0m,
                                                               Descricao = cashOut.Descricao,
                                                               Status = cashOut.Status,
                                                               TipoMovimentacao = TipoMovimentacao.Saida,
@@ -107,6 +111,8 @@ namespace CarteiraDigital.Dados.Repositorios
                                                                     Data = transferencia.Data,
                                                                     TipoOperacao = TipoOperacao.Transferencia,
                                                                     Valor = transferencia.Valor,
+                                                                    ValorTaxa = 0m,
+                                                                    ValorBonificacao = 0m,
                                                                     Descricao = transferencia.Descricao,
                                                                     Status = transferencia.Status,
                                                                     TipoMovimentacao = transferencia.TipoMovimentacao,

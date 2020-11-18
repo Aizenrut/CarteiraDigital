@@ -31,19 +31,6 @@ services:
     ports:
     - 1433:1433
 
-  cd_api:
-    build:
-      context: .
-      dockerfile: CarteiraDigital.Api.Dockerfile
-    container_name: cd_api
-    hostname: cd_api_server
-    networks:
-    - cd_net
-    ports:
-    - 5001:80
-    depends_on:
-    - cd_sql
-
   cd_autenticacao:
     build:
       context: .
@@ -54,6 +41,19 @@ services:
     - cd_net
     ports:
     - 6001:80
+    depends_on:
+    - cd_sql
+
+  cd_api:
+    build:
+      context: .
+      dockerfile: CarteiraDigital.Api.Dockerfile
+    container_name: cd_api
+    hostname: cd_api_server
+    networks:
+    - cd_net
+    ports:
+    - 5001:80
     depends_on:
     - cd_sql
 
