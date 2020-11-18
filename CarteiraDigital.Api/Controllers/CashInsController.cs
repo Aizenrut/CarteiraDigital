@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Api.Controllers
 {
@@ -29,7 +30,7 @@ namespace CarteiraDigital.Api.Controllers
         /// Gera uma operação de cash-in.
         /// </summary>
         [HttpPost]
-        public IActionResult GerarCashIn(DadosOperacaoUnaria dados)
+        public async Task<IActionResult> GerarCashIn(DadosOperacaoUnaria dados)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ErroRespostaDto.Para(ModelState));
@@ -37,7 +38,7 @@ namespace CarteiraDigital.Api.Controllers
             var token = Request.Headers[HeaderNames.Authorization];
             var contaId = requisicaoServico.ObterContaDoCliente(token);
 
-            cashInServico.Gerar(new OperacaoUnariaDto(contaId, dados.Valor, dados.Descricao));
+            await cashInServico.Gerar(new OperacaoUnariaDto(contaId, dados.Valor, dados.Descricao));
 
             var movimentacaoUri = Url.Action("ConsultarExtrato", "Contas", null, HttpContext.Request.Scheme);
             return Created(movimentacaoUri, null);

@@ -36,7 +36,7 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             transferenciaServico.GerarPeloTipo(conta.Id, valor, "Teste unitário.", tipoTransferencia);
@@ -75,7 +75,7 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             transferenciaServico.GerarPeloTipo(conta.Id, valor, "Teste unitário.", tipoTransferencia);
@@ -133,7 +133,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico, null);
 
             // Act
             transferenciaServico.Efetivar(new EfetivarOperacaoBinariaDto(transferenciaSaida.Id, transferenciaEntrada.Id));
@@ -176,7 +176,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico, null);
 
             // Act
             transferenciaServico.Efetivar(new EfetivarOperacaoBinariaDto(transferenciaSaida.Id, transferenciaEntrada.Id));
@@ -231,7 +231,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico, null);
 
             // Act
             transferenciaServico.Efetivar(new EfetivarOperacaoBinariaDto(transferenciaSaida.Id, transferenciaEntrada.Id));
@@ -278,7 +278,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico, null);
 
             // Act
             transferenciaServico.Efetivar(new EfetivarOperacaoBinariaDto(transferenciaSaida.Id, transferenciaEntrada.Id));
@@ -328,7 +328,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, transacaoServico, null);
 
             // Act
             transferenciaServico.Efetivar(new EfetivarOperacaoBinariaDto(transferenciaSaida.Id, transferenciaEntrada.Id));
@@ -370,7 +370,7 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             transferenciaServico.Efetivar(transferencia);
@@ -400,7 +400,7 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             Action acao = () => transferenciaServico.Efetivar(transferencia);
@@ -436,7 +436,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             Action acao = () => transferenciaServico.Efetivar(transferencia);
@@ -473,7 +473,7 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
 
-            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null);
+            var transferenciaServico = new TransferenciaServico(transferenciaRepositorio, operacaoServico, contaServico, null, null);
 
             // Act
             Action acao = () => transferenciaServico.Efetivar(transferencia);

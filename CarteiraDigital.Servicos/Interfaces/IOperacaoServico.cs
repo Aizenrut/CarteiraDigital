@@ -5,7 +5,7 @@ namespace CarteiraDigital.Servicos
 {
     public interface IOperacaoServico
     {
-        void MarcarPendente(Operacao operacao);
+        bool PodeAlterarStatus(Operacao operacao);
         void MarcarEfetivada(Operacao operacao);
         void MarcarComErro(Operacao operacao, string erro);
         void AlterarStatusTemplate(Operacao operacao, StatusOperacao novoStatus);

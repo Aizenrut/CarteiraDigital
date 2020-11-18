@@ -43,7 +43,7 @@ namespace CarteiraDigital.ConsumidorOperacoes.HostedServices
 
         private async void ConsumeAsync(object model, BasicDeliverEventArgs eventArgs)
         {
-            await new TaskFactory().StartNew(() => consumidorOperacoes.Consumir(model, eventArgs));
+            await new TaskFactory().StartNew(() => consumidorOperacoes.Consumir(canal, eventArgs));
         }
 
         public override void Dispose()

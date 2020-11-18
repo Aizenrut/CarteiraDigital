@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CarteiraDigital.ProdutorOperacoes.Controllers
 {
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ProdutorCashOutsController : ControllerBase
     {
         private readonly IProdutorOperacoesServico<EfetivarOperacaoUnariaDto> produtor;

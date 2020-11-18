@@ -34,14 +34,14 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
             return await userManager.FindByNameAsync(nomeUsuario);
         }
 
-        public bool EhUsuariovalido(Usuario usuario)
+        public bool EhUsuarioValido(Usuario usuario)
         {
-            return usuario != null && usuario.Ativo;
+            return usuario != null;
         }
 
-        public async Task<bool> EhUsuariovalidoAsync(string nomeUsuario)
+        public async Task<bool> EhUsuarioValidoAsync(string nomeUsuario)
         {
-            return EhUsuariovalido(await ObterPeloNomeAsync(nomeUsuario));
+            return EhUsuarioValido(await ObterPeloNomeAsync(nomeUsuario));
         }
 
         public async Task<IdentityResult> CadastrarAsync(CadastroUsuarioDto cadastro)
@@ -66,12 +66,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
         public async Task<IdentityResult> AlterarSenhaAsync(Usuario usuario, string senhaAtual, string novaSenha)
         {
             return await userManager.ChangePasswordAsync(usuario, senhaAtual, novaSenha);
-        }
-
-        public async Task<IdentityResult> InativarAsync(Usuario usuario)
-        {
-            usuario.Ativo = false;
-            return await userManager.UpdateAsync(usuario);
         }
 
         public bool PossuiIdadeMinima(Usuario usuario)

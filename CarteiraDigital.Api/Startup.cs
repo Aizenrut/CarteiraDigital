@@ -5,6 +5,7 @@ using CarteiraDigital.Dados.Expressoes;
 using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Servicos;
+using CarteiraDigital.Servicos.Clients;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -22,11 +23,11 @@ namespace CarteiraDigital.Api
 {
     public class Startup
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration configuracao;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuracao)
         {
-            this.configuration = configuration;
+            this.configuracao = configuracao;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -46,10 +47,10 @@ namespace CarteiraDigital.Api
 
             services.AddDbContext<CarteiraDigitalContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("CarteiraDigital"));
+                options.UseSqlServer(configuracao.GetConnectionString("CarteiraDigital"));
             });
 
-            var schemesSection = configuration.GetSection("Schemes");
+            var schemesSection = configuracao.GetSection("Schemes");
 
             services.AddAuthentication(options =>
             {
@@ -57,8 +58,8 @@ namespace CarteiraDigital.Api
                 options.DefaultChallengeScheme = schemesSection["Challenge"];
             }).AddJwtBearer(schemesSection["Authentication"], options =>
             {
-                var keysSection = configuration.GetSection("Keys");
-                var claimsSection = configuration.GetSection("Claims");
+                var keysSection = configuracao.GetSection("Keys");
+                var claimsSection = configuracao.GetSection("Claims");
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -71,6 +72,11 @@ namespace CarteiraDigital.Api
                     ClockSkew = TimeSpan.FromMinutes(5),
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keysSection["JwtBearer"]))
                 };
+            });
+
+            services.AddHttpClient<IProdutorOperacoesClient, ProdutorOperacoesClient>(options =>
+            {
+                options.BaseAddress = new Uri("http://cd_produtor:80/api/v1.0/");
             });
 
             services.AddTransient<IJwtServico, JwtServico>();

@@ -8,27 +8,52 @@ namespace CarteiraDigital.Servicos.Testes
     public class OperacaoServicoTestes
     {
         [TestMethod]
-        public void MarcarPendente_NovaOperacao_DeveAlterarOStatus()
+        public void PodeAlterarStatus_StatusPendente_DeveRetornarTrue()
         {
             // Arrange
             var operacao = new CashIn();
             var operacaoServico = new OperacaoServico();
 
             // Act
-            operacaoServico.MarcarPendente(operacao);
+            var resultado = operacaoServico.PodeAlterarStatus(operacao);
 
             //Assert
-            Assert.AreEqual(StatusOperacao.Pendente, operacao.Status);
+            Assert.IsTrue(resultado);
+        }
+
+        [TestMethod]
+        public void PodeAlterarStatus_StatusEfetivado_DeveRetornarFalse()
+        {
+            // Arrange
+            var operacao = new CashIn { Status = StatusOperacao.Efetivada };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            var resultado = operacaoServico.PodeAlterarStatus(operacao);
+
+            //Assert
+            Assert.IsTrue(resultado);
+        }
+
+        [TestMethod]
+        public void PodeAlterarStatus_StatusComErro_DeveRetornarFalse()
+        {
+            // Arrange
+            var operacao = new CashIn { Status = StatusOperacao.ComErro };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            var resultado = operacaoServico.PodeAlterarStatus(operacao);
+
+            //Assert
+            Assert.IsFalse(resultado);
         }
 
         [TestMethod]
         public void MarcarEfetivada_OperacaoPendente_DeveAlterarOStatus()
         {
             // Arrange
-            var operacao = new CashIn
-            {
-                Status = StatusOperacao.Pendente
-            };
+            var operacao = new CashIn();
             var operacaoServico = new OperacaoServico();
 
             // Act
@@ -43,11 +68,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var erro = "teste";
-
-            var operacao = new CashIn
-            {
-                Status = StatusOperacao.Pendente
-            };
+            var operacao = new CashIn();
 
             var operacaoServico = new OperacaoServico();
 
@@ -60,20 +81,61 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void AlterarStatusTemplate_StatusPendente_DeveAlterarOStatus()
+        public void AlterarStatusTemplate_OperacaoPendenteStatusEfetivada_DeveAlterarOStatus()
         {
             // Arrange
-            var operacao = new CashIn
-            {
-                Status = StatusOperacao.Pendente
-            };
+            var operacao = new CashIn();
             var operacaoServico = new OperacaoServico();
 
             // Act
-            operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Pendente);
+            operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Efetivada);
 
             //Assert
-            Assert.AreEqual(StatusOperacao.Pendente, operacao.Status);
+            Assert.AreEqual(StatusOperacao.Efetivada, operacao.Status);
+        }
+
+        [TestMethod]
+        public void AlterarStatusTemplate_OperacaoPendenteStatusComErro_DeveAlterarOStatus()
+        {
+            // Arrange
+            var operacao = new CashIn();
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.ComErro);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.ComErro, operacao.Status);
+        }
+
+        [TestMethod]
+        public void AlterarStatusTemplate_OperacaoEfetivadaStatusComErro_DeveLancarExcecao()
+        {
+            // Arrange
+            var operacao = new CashIn { Status = StatusOperacao.Efetivada };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.ComErro);
+
+            //Assert
+            Assert.AreEqual(StatusOperacao.ComErro, operacao.Status);
+        }
+
+        [TestMethod]
+        public void AlterarStatusTemplate_OperacaoComErroStatusEfetivada_DeveLancarExcecao()
+        {
+            // Arrange
+            var operacao = new CashIn { Status = StatusOperacao.ComErro };
+            var operacaoServico = new OperacaoServico();
+
+            // Act
+            Action acao = () => operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Efetivada);
+
+            //Assert
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("Não é possível alterar o status de uma operação Com erro!"));
+            Assert.AreEqual(StatusOperacao.ComErro, operacao.Status);
         }
 
         [TestMethod]

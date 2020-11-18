@@ -56,7 +56,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Controllers
 
             var usuario = await usuarioServico.ObterPeloNomeAsync(alteracao.NomeUsuario);
 
-            if (!usuarioServico.EhUsuariovalido(usuario))
+            if (!usuarioServico.EhUsuarioValido(usuario))
                 return NotFound(ErroRespostaDto.ParaNotFound(alteracao.NomeUsuario));
 
             var resultado = await usuarioServico.AlterarSenhaAsync(usuario, alteracao.Senha, alteracao.NovaSenha);
@@ -65,27 +65,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Controllers
                 return BadRequest(ErroRespostaDto.Para(resultado.Errors));
 
             return Ok();
-        }
-
-        /// <summary>
-        /// Inativa um usuário.
-        /// </summary>
-        [HttpDelete("{nomeUsuario}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErroRespostaDto))]
-        public async Task<IActionResult> Inativar(string nomeUsuario)
-        {
-            var usuario = await usuarioServico.ObterPeloNomeAsync(nomeUsuario);
-
-            if (!usuarioServico.EhUsuariovalido(usuario))
-                return NotFound(ErroRespostaDto.ParaNotFound(nomeUsuario));
-
-            var resultado = await usuarioServico.InativarAsync(usuario);
-
-            if (!resultado.Succeeded)
-                return BadRequest(ErroRespostaDto.Para(resultado.Errors));
-
-            return NoContent();
         }
     }
 }

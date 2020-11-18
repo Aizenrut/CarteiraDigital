@@ -24,6 +24,8 @@ namespace CarteiraDigital.ProdutorOperacoes
                 options.EnableEndpointRouting = false;
             });
 
+            services.AddApiVersioning();
+
             services.AddSingleton(factory =>
             {
                 var rabbitMqSection = configuracao.GetSection("RabbitMQ");
@@ -59,6 +61,7 @@ namespace CarteiraDigital.ProdutorOperacoes
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseApiVersioning();
             app.UseMvc();
         }
     }

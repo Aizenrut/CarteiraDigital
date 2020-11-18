@@ -13,20 +13,17 @@ namespace CarteiraDigital.ConsumidorOperacoes.Servicos
                                                                                                                               where TEfetivar : struct
                                                                                                                               where TGerar : struct
     {
-        private readonly IModel channel;
         private readonly IOperacaoStrategy<TOperacao, TEfetivar, TGerar> strategy;
         private readonly ILogger<ConsumidorOperacoesServico<TOperacao, TEfetivar, TGerar>> logger;
 
-        public ConsumidorOperacoesServico(IModel channel,
-                                          IOperacaoStrategy<TOperacao, TEfetivar, TGerar> strategy,
+        public ConsumidorOperacoesServico(IOperacaoStrategy<TOperacao, TEfetivar, TGerar> strategy,
                                           ILogger<ConsumidorOperacoesServico<TOperacao, TEfetivar, TGerar>> logger)
         {
-            this.channel = channel;
             this.strategy = strategy;
             this.logger = logger;
         }
 
-        public void Consumir(object model, BasicDeliverEventArgs eventArgs)
+        public void Consumir(IModel canal, BasicDeliverEventArgs eventArgs)
         {
             try
             {
@@ -35,12 +32,12 @@ namespace CarteiraDigital.ConsumidorOperacoes.Servicos
                 var operacao = JsonConvert.DeserializeObject<TEfetivar>(mensagem);
 
                 strategy.Efetivar(operacao);
-                channel.BasicAck(eventArgs.DeliveryTag, false);
+                canal.BasicAck(eventArgs.DeliveryTag, false);
                 logger.LogInformation($"Operação efetivada.");
             }
             catch (Exception e)
             {
-                channel.BasicNack(eventArgs.DeliveryTag, false, true);
+                canal.BasicNack(eventArgs.DeliveryTag, false, true);
                 logger.LogError($"Erro: {e.Message}", e);
             }
         }

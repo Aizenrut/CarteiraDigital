@@ -21,9 +21,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Api", "Cart
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.Api.Testes", "CarteiraDigital.Api.Testes\CarteiraDigital.Api.Testes.csproj", "{2C44C748-E0B0-49CC-B468-F6D2C4AE4C2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.ProdutorOperacoes", "CarteiraDigital.ProdutorOperacoes\CarteiraDigital.ProdutorOperacoes.csproj", "{456FF40E-C8A7-4192-8E54-2B7C31F78BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.ProdutorOperacoes", "CarteiraDigital.ProdutorOperacoes\CarteiraDigital.ProdutorOperacoes.csproj", "{456FF40E-C8A7-4192-8E54-2B7C31F78BF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiraDigital.ConsumidorOperacoes", "CarteiraDigital.ConsumidorOperacoes\CarteiraDigital.ConsumidorOperacoes.csproj", "{E06634E5-E026-4A45-B801-A792830FA372}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarteiraDigital.ConsumidorOperacoes", "CarteiraDigital.ConsumidorOperacoes\CarteiraDigital.ConsumidorOperacoes.csproj", "{E06634E5-E026-4A45-B801-A792830FA372}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{1360C92C-F152-46B3-80E2-83AC56D620D8}"
+	ProjectSection(SolutionItems) = preProject
+		CarteiraDigital.Api.Dockerfile = CarteiraDigital.Api.Dockerfile
+		CarteiraDigital.ConsumidorOperacoes.Dockerfile = CarteiraDigital.ConsumidorOperacoes.Dockerfile
+		CarteiraDigital.ProdutorOperacoes.Dockerfile = CarteiraDigital.ProdutorOperacoes.Dockerfile
+		CarteiraDigital.ProvedorAutenticacao.Dockerfile = CarteiraDigital.ProvedorAutenticacao.Dockerfile
+		definitions.json = definitions.json
+		docker-compose.yml = docker-compose.yml
+		MSSQLServer.Dockerfile = MSSQLServer.Dockerfile
+		rabbitmq.config = rabbitmq.config
+		RabbitMQ.Dockerfile = RabbitMQ.Dockerfile
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mensageria", "Mensageria", "{EDDDE913-C385-4F36-9C6A-B6AB8651B1B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testes", "Testes", "{0132793B-1B29-4367-8463-BC0D12384F00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +95,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AFC8103C-A9F6-45D3-AEA1-1F835BE9FB4E} = {0132793B-1B29-4367-8463-BC0D12384F00}
+		{C7E02207-4763-4746-9B06-A60D90ACB29A} = {0132793B-1B29-4367-8463-BC0D12384F00}
+		{A7BB15F4-ACFE-48DA-8B47-B0F6BF5E80AC} = {0132793B-1B29-4367-8463-BC0D12384F00}
+		{2C44C748-E0B0-49CC-B468-F6D2C4AE4C2A} = {0132793B-1B29-4367-8463-BC0D12384F00}
+		{456FF40E-C8A7-4192-8E54-2B7C31F78BF1} = {EDDDE913-C385-4F36-9C6A-B6AB8651B1B0}
+		{E06634E5-E026-4A45-B801-A792830FA372} = {EDDDE913-C385-4F36-9C6A-B6AB8651B1B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6DCC2797-713E-4D9C-930F-1C799091F67B}

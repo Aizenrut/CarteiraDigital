@@ -1,8 +1,10 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
+using CarteiraDigital.Servicos.Clients;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos.Testes
 {
@@ -10,7 +12,7 @@ namespace CarteiraDigital.Servicos.Testes
     public class CashOutServicoTestes
     {
         [TestMethod]
-        public void Gerar_CashOutValido_DeveRetornarOCashOutECalcularTaxa()
+        public async Task Gerar_CashOutValido_DeveRetornarOCashOutECalcularTaxa()
         {
             // Arrange
             var conta = new Conta { Id = 1 };
@@ -32,11 +34,13 @@ namespace CarteiraDigital.Servicos.Testes
 
             var contaServico = new ContaServico(contaRepositorio);
             var operacaoServico = new OperacaoServico();
+            
+            var produtorClient = Substitute.For<IProdutorOperacoesClient>();
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, null);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, null, produtorClient);
 
             // Act
-            cashOutServico.Gerar(new OperacaoUnariaDto(conta.Id, valor, descricao));
+            await cashOutServico.Gerar(new OperacaoUnariaDto(conta.Id, valor, descricao));
 
             // Assert
             Assert.IsNotNull(cashOutGerado);
@@ -80,7 +84,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico, null);
 
             // Act
             cashOutServico.Efetivar(new EfetivarOperacaoUnariaDto(cashOut.Id));
@@ -118,7 +122,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, null, transacaoServico);
+            var cashOutServico = new CashOutServico(cashOutRepositorio, operacaoServico, contaServico, null, transacaoServico, null);
 
             // Act
             cashOutServico.Efetivar(new EfetivarOperacaoUnariaDto(cashOut.Id));

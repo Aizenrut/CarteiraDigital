@@ -10,7 +10,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
         public string Sobrenome { get; set; }
         public string Cpf { get; set; }
         public DateTime DataNascimento { get; set; }
-        public bool Ativo { get; set; }
 
         public Usuario()
         {
@@ -22,7 +21,6 @@ namespace CarteiraDigital.ProvedorAutenticacao.Models
             Sobrenome = sobrenome;
             Cpf = cpf;
             DataNascimento = dataNascimento;
-            Ativo = true;
         }
     }
 }

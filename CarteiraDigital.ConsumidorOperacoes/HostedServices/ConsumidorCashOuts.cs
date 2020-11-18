@@ -1,5 +1,6 @@
 ﻿using CarteiraDigital.ConsumidorOperacoes.Servicos;
 using CarteiraDigital.Models;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
 namespace CarteiraDigital.ConsumidorOperacoes.HostedServices

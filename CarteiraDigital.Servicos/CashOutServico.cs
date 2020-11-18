@@ -1,6 +1,8 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
+using CarteiraDigital.Servicos.Clients;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos
 {
@@ -11,18 +13,21 @@ namespace CarteiraDigital.Servicos
         private readonly IContaServico contaServico;
         private readonly IConfiguracaoServico configuracaoServico;
         private readonly ITransacaoServico transacaoServico;
+        private readonly IProdutorOperacoesClient produtorClient;
 
         public CashOutServico(ICashOutRepositorio cashOutRepositorio,
                              IOperacaoServico operacaoServico,
                              IContaServico contaServico,
                              IConfiguracaoServico configuracaoServico,
-                             ITransacaoServico transacaoServico)
+                             ITransacaoServico transacaoServico,
+                             IProdutorOperacoesClient produtorClient)
         {
             this.cashOutRepositorio = cashOutRepositorio;
             this.operacaoServico = operacaoServico;
             this.contaServico = contaServico;
             this.configuracaoServico = configuracaoServico;
             this.transacaoServico = transacaoServico;
+            this.produtorClient = produtorClient;
         }
 
         public void Efetivar(EfetivarOperacaoUnariaDto dto)
@@ -49,17 +54,17 @@ namespace CarteiraDigital.Servicos
             cashOutRepositorio.Update(cashOut);
         }
 
-        public void Gerar(OperacaoUnariaDto dto)
+        public async Task Gerar(OperacaoUnariaDto dto)
         {
             var conta = contaServico.ObterConta(dto.ContaId);
             var valorTaxa = dto.Valor * configuracaoServico.ObterPercentualTaxa();
 
             var cashOut = new CashOut(conta.Id, dto.Valor, dto.Descricao, conta.Saldo, valorTaxa);
 
-            operacaoServico.MarcarPendente(cashOut);
-
             cashOutRepositorio.Post(cashOut);
             contaServico.VincularCashOut(conta, cashOut);
+
+            await produtorClient.EnfileirarCashOut(new EfetivarOperacaoUnariaDto(cashOut.Id));
         }
     }
 }

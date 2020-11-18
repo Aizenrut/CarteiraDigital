@@ -5,9 +5,10 @@ namespace CarteiraDigital.Servicos
 {
     public class OperacaoServico : IOperacaoServico
     {
-        public void MarcarPendente(Operacao operacao)
+
+        public bool PodeAlterarStatus(Operacao operacao)
         {
-            AlterarStatusTemplate(operacao, StatusOperacao.Pendente);
+            return operacao.Status != StatusOperacao.ComErro;
         }
 
         public void MarcarEfetivada(Operacao operacao)
@@ -23,6 +24,9 @@ namespace CarteiraDigital.Servicos
 
         public void AlterarStatusTemplate(Operacao operacao, StatusOperacao novoStatus)
         {
+            if (!PodeAlterarStatus(operacao))
+                throw new CarteiraDigitalException($"Não é possível alterar o status de uma operação {operacao.Status.ObterDescricao()}!");
+
             operacao.Status = novoStatus;
         }
 

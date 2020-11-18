@@ -1,0 +1,85 @@
+version: '3'
+
+networks:
+
+  cd_net:
+    driver: bridge
+    name: cd_net
+
+services:
+
+  cd_rabbit:
+    build:
+      context: .
+      dockerfile: RabbitMQ.Dockerfile
+    container_name: cd_rabbit
+    hostname: cd_rabbit_server
+    networks:
+    - cd_net
+    ports:
+    - 5672:5672
+    - 15672:15672
+
+  cd_sql:
+    build:
+      context: .
+      dockerfile: MSSQLServer.Dockerfile
+    container_name: cd_sql
+    hostname: cd_sql_server
+    networks:
+    - cd_net
+    ports:
+    - 1433:1433
+
+  cd_api:
+    build:
+      context: .
+      dockerfile: CarteiraDigital.Api.Dockerfile
+    container_name: cd_api
+    hostname: cd_api_server
+    networks:
+    - cd_net
+    ports:
+    - 5001:80
+    depends_on:
+    - cd_sql
+
+  cd_autenticacao:
+    build:
+      context: .
+      dockerfile: CarteiraDigital.ProvedorAutenticacao.Dockerfile
+    container_name: cd_autenticacao
+    hostname: cd_autenticacao_server
+    networks:
+    - cd_net
+    ports:
+    - 6001:80
+    depends_on:
+    - cd_sql
+
+  cd_produtor:
+    build:
+      context: .
+      dockerfile: CarteiraDigital.ProdutorOperacoes.Dockerfile
+    container_name: cd_produtor
+    hostname: cd_produtor_server
+    networks:
+    - cd_net
+    ports:
+    - 7001:80
+    depends_on:
+    - cd_rabbit
+
+  cd_consumidor:
+    build:
+      context: .
+      dockerfile: CarteiraDigital.ConsumidorOperacoes.Dockerfile
+    container_name: cd_consumidor
+    hostname: cd_consumidor_server
+    networks:
+    - cd_net
+    ports:
+    - 8001:80
+    restart: on-failure
+    depends_on:
+    - cd_rabbit

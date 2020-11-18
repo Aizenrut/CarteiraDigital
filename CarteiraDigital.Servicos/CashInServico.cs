@@ -1,6 +1,8 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
+using CarteiraDigital.Servicos.Clients;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos
 {
@@ -11,18 +13,21 @@ namespace CarteiraDigital.Servicos
         private readonly IContaServico contaServico;
         private readonly IConfiguracaoServico configuracaoServico;
         private readonly ITransacaoServico transacaoServico;
+        private readonly IProdutorOperacoesClient produtorClient;
 
         public CashInServico(ICashInRepositorio cashInRepositorio,
                              IOperacaoServico operacaoServico,
                              IContaServico contaServico,
                              IConfiguracaoServico configuracaoServico,
-                             ITransacaoServico transacaoServico)
+                             ITransacaoServico transacaoServico,
+                             IProdutorOperacoesClient produtorClient)
         {
             this.cashInRepositorio = cashInRepositorio;
             this.operacaoServico = operacaoServico;
             this.contaServico = contaServico;
             this.configuracaoServico = configuracaoServico;
             this.transacaoServico = transacaoServico;
+            this.produtorClient = produtorClient;
         }
 
         public bool EhPrimeiroCashIn(int contaId)
@@ -54,7 +59,7 @@ namespace CarteiraDigital.Servicos
             cashInRepositorio.Update(cashIn);
         }
 
-        public void Gerar(OperacaoUnariaDto dto)
+        public async Task Gerar(OperacaoUnariaDto dto)
         {
             var conta = contaServico.ObterConta(dto.ContaId);
             decimal valor = ObterValorComBonificacao(conta.Id, dto.Valor);
@@ -63,6 +68,8 @@ namespace CarteiraDigital.Servicos
 
             cashInRepositorio.Post(cashIn);
             contaServico.VincularCashIn(conta, cashIn);
+
+            await produtorClient.EnfileirarCashIn(new EfetivarOperacaoUnariaDto(cashIn.Id));
         }
 
         public decimal ObterValorComBonificacao(int contaId, decimal valor)
@@ -71,6 +78,6 @@ namespace CarteiraDigital.Servicos
                 return valor * (1 + configuracaoServico.ObterPercentualBonificacao());
 
             return valor;
-        } 
+        }
     }
 }

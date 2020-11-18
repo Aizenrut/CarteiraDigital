@@ -1,7 +1,9 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
+using CarteiraDigital.Servicos.Clients;
 using System;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos
 {
@@ -11,19 +13,21 @@ namespace CarteiraDigital.Servicos
         private readonly IContaServico contaServico;
         private readonly ITransacaoServico transacaoServico;
         private readonly IOperacaoServico operacaoServico;
-
+        private readonly IProdutorOperacoesClient produtorClient;
 
         private readonly Action<Conta, decimal>[] realizarOperacaoPeloTipo;
 
         public TransferenciaServico(ITransferenciaRepositorio transferenciaRepositorio,
                                     IOperacaoServico operacaoServico,
                                     IContaServico contaServico,
-                                    ITransacaoServico transacaoServico)
+                                    ITransacaoServico transacaoServico,
+                                    IProdutorOperacoesClient produtorClient)
         {
             this.transferenciaRepositorio = transferenciaRepositorio;
             this.contaServico = contaServico;
             this.transacaoServico = transacaoServico;
             this.operacaoServico = operacaoServico;
+            this.produtorClient = produtorClient;
 
             realizarOperacaoPeloTipo = new Action<Conta, decimal>[]
             {
@@ -64,21 +68,23 @@ namespace CarteiraDigital.Servicos
             operacaoServico.MarcarEfetivada(transferencia);
         }
 
-        public void Gerar(OperacaoBinariaDto dto)
+        public async Task Gerar(OperacaoBinariaDto dto)
         {
-            GerarPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
-            GerarPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
+            int transferenciaSaidaId = GerarPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
+            int transferenciaEntradaId = GerarPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
+
+            await produtorClient.EnfileirarTransferencia(new EfetivarOperacaoBinariaDto(transferenciaSaidaId, transferenciaEntradaId));
         }
 
-        public void GerarPeloTipo(int contaId, decimal valor, string descricao, TipoMovimentacao tipoTransferencia)
+        public int GerarPeloTipo(int contaId, decimal valor, string descricao, TipoMovimentacao tipoTransferencia)
         {
             var conta = contaServico.ObterConta(contaId);
             var transferencia = new Transferencia(contaId, valor, descricao, conta.Saldo, tipoTransferencia);
 
-            operacaoServico.MarcarPendente(transferencia);
-
             transferenciaRepositorio.Post(transferencia);
             contaServico.VincularTransferencia(conta, transferencia);
+
+            return transferencia.Id;
         }
     }
 }

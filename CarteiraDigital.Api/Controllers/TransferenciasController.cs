@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Api.Controllers
 {
@@ -38,7 +39,7 @@ namespace CarteiraDigital.Api.Controllers
         /// Gera uma operação de transferência para um determinado usuário.
         /// </summary>
         [HttpPost]
-        public IActionResult GerarTransferencia(DadosOperacaoBinaria dados)
+        public async Task<IActionResult> GerarTransferencia(DadosOperacaoBinaria dados)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ErroRespostaDto.Para(ModelState));
@@ -47,7 +48,7 @@ namespace CarteiraDigital.Api.Controllers
             var contaOrigemId = requisicaoServico.ObterContaDoCliente(token);
             var contaDestinoId = contaServico.ObterIdPeloTitular(dados.UsuarioDestino);
 
-            transferenciaServico.Gerar(new OperacaoBinariaDto(contaOrigemId, contaDestinoId, dados.Valor, dados.Descricao));
+            await transferenciaServico.Gerar(new OperacaoBinariaDto(contaOrigemId, contaDestinoId, dados.Valor, dados.Descricao));
 
             var movimentacaoUri = Url.Action("ConsultarExtrato", "Contas", null, HttpContext.Request.Scheme);
             return Created(movimentacaoUri, null);

@@ -1,10 +1,12 @@
 ﻿using CarteiraDigital.Dados.Repositorios;
 using CarteiraDigital.Dados.Servicos;
 using CarteiraDigital.Models;
+using CarteiraDigital.Servicos.Clients;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos.Testes
 {
@@ -20,7 +22,7 @@ namespace CarteiraDigital.Servicos.Testes
             var cashInRepositorio = Substitute.For<ICashInRepositorio>();
             cashInRepositorio.Any(Arg.Any<Expression<Func<CashIn, bool>>>()).Returns(true);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null);
+            var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null, null);
 
             // Act
             var resultado = cashInServico.EhPrimeiroCashIn(contaId);
@@ -38,7 +40,7 @@ namespace CarteiraDigital.Servicos.Testes
             var cashInRepositorio = Substitute.For<ICashInRepositorio>();
             cashInRepositorio.Any(Arg.Any<Expression<Func<CashIn, bool>>>()).Returns(false);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null);
+            var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null, null);
 
             // Act
             var resultado = cashInServico.EhPrimeiroCashIn(contaId);
@@ -48,7 +50,7 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void Gerar_PrimeiroCashInValido_DeveRetornarOCashInComBonificacao()
+        public async Task Gerar_PrimeiroCashInValido_DeveRetornarOCashInComBonificacao()
         {
             // Arrange
             var conta = new Conta { Id = 1 };
@@ -67,10 +69,12 @@ namespace CarteiraDigital.Servicos.Testes
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualBonificacao().Returns(0.1m);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, contaServico, configuracaoServico, null);
+            var produtorClient = Substitute.For<IProdutorOperacoesClient>();
+
+            var cashInServico = new CashInServico(cashInRepositorio, null, contaServico, configuracaoServico, null, produtorClient);
 
             // Act
-            cashInServico.Gerar(new OperacaoUnariaDto(conta.Id, 10m, descricao));
+            await cashInServico.Gerar(new OperacaoUnariaDto(conta.Id, 10m, descricao));
 
             // Assert
             Assert.IsNotNull(cashInGerado);
@@ -81,7 +85,7 @@ namespace CarteiraDigital.Servicos.Testes
         }
 
         [TestMethod]
-        public void GerarCashIn_CashInValido_DeveRetornarOCashInSemBonificacao()
+        public async Task GerarCashIn_CashInValido_DeveRetornarOCashInSemBonificacao()
         {
             // Arrange
             var conta = new Conta { Id = 1 };
@@ -102,12 +106,14 @@ namespace CarteiraDigital.Servicos.Testes
             contaRepositorio.Any(conta.Id).Returns(true);
             contaRepositorio.Get(conta.Id).Returns(conta);
 
+            var produtorClient = Substitute.For<IProdutorOperacoesClient>();
+
             var contaServico = new ContaServico(contaRepositorio);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, contaServico, configuracaoServico, null);
+            var cashInServico = new CashInServico(cashInRepositorio, null, contaServico, configuracaoServico, null, produtorClient);
 
             // Act
-            cashInServico.Gerar(new OperacaoUnariaDto(conta.Id, valor, descricao));
+            await cashInServico.Gerar(new OperacaoUnariaDto(conta.Id, valor, descricao));
 
             // Assert
             Assert.IsNotNull(cashInGerado);
@@ -147,7 +153,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico);
+            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico, null);
 
             // Act
             cashInServico.Efetivar(new EfetivarOperacaoUnariaDto(cashIn.Id));
@@ -183,7 +189,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, null, transacaoServico);
+            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, null, transacaoServico, null);
 
             // Act
             cashInServico.Efetivar(new EfetivarOperacaoUnariaDto(cashIn.Id));
@@ -224,7 +230,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
 
-            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico);
+            var cashInServico = new CashInServico(cashInRepositorio, operacaoServico, contaServico, configuracaoServico, transacaoServico, null);
 
             // Act
             cashInServico.Efetivar(new EfetivarOperacaoUnariaDto(cashIn.Id));
@@ -248,7 +254,7 @@ namespace CarteiraDigital.Servicos.Testes
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualBonificacao().Returns(0.1m);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null);
+            var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null, null);
 
             // Act
             var resultado = cashInServico.ObterValorComBonificacao(contaId, 10);
@@ -269,7 +275,7 @@ namespace CarteiraDigital.Servicos.Testes
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualBonificacao().Returns(0.1m);
 
-            var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null);
+            var cashInServico = new CashInServico(cashInRepositorio, null, null, configuracaoServico, null, null);
 
             // Act
             var resultado = cashInServico.ObterValorComBonificacao(contaId, 10);

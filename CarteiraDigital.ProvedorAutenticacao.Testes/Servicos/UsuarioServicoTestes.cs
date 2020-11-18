@@ -18,33 +18,20 @@ namespace CarteiraDigital.ProvedorAutenticacao.Testes.Servicos
             var usuarioServico = new UsuarioServico(null, null, null, null, null);
 
             // Act
-            var resultado = usuarioServico.EhUsuariovalido(null);
+            var resultado = usuarioServico.EhUsuarioValido(null);
 
             // Assert
             Assert.IsFalse(resultado);
         }
 
         [TestMethod]
-        public void EhUsuarioValido_UsuarioInativo_DeveRetornarFalse()
+        public void EhUsuarioValido_UsuarioValido_DeveRetornarTrue()
         {
             // Arrange
             var usuarioServico = new UsuarioServico(null, null, null, null, null);
 
             // Act
-            var resultado = usuarioServico.EhUsuariovalido(new Usuario());
-
-            // Assert
-            Assert.IsFalse(resultado);
-        }
-
-        [TestMethod]
-        public void EhUsuarioValido_UsuarioAtivo_DeveRetornarTrue()
-        {
-            // Arrange
-            var usuarioServico = new UsuarioServico(null, null, null, null, null);
-
-            // Act
-            var resultado = usuarioServico.EhUsuariovalido(new Usuario() { Ativo = true });
+            var resultado = usuarioServico.EhUsuarioValido(new Usuario());
 
             // Assert
             Assert.IsTrue(resultado);

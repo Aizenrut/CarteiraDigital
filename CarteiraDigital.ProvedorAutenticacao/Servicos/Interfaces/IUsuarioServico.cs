@@ -7,11 +7,10 @@ namespace CarteiraDigital.ProvedorAutenticacao.Servicos
     public interface IUsuarioServico
     {
         Task<Usuario> ObterPeloNomeAsync(string nomeUsuario);
-        bool EhUsuariovalido(Usuario usuario);
-        Task<bool> EhUsuariovalidoAsync(string nomeUsuario);
+        bool EhUsuarioValido(Usuario usuario);
+        Task<bool> EhUsuarioValidoAsync(string nomeUsuario);
         Task<IdentityResult> CadastrarAsync(CadastroUsuarioDto cadastro);
         Task<IdentityResult> AlterarSenhaAsync(Usuario usuario, string senhaAtual, string novaSenha);
-        Task<IdentityResult> InativarAsync(Usuario usuario);
         bool PossuiIdadeMinima(Usuario usuario);
         void ValidarUsuario(Usuario usuario);
     }

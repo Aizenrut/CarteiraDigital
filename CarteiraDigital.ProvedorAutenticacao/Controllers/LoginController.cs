@@ -39,7 +39,7 @@ namespace CarteiraDigital.ProvedorAutenticacao.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ErroRespostaDto.Para(ModelState));
 
-            if (!await usuarioServico.EhUsuariovalidoAsync(credenciais.NomeUsuario))
+            if (!await usuarioServico.EhUsuarioValidoAsync(credenciais.NomeUsuario))
                 return NotFound(ErroRespostaDto.ParaNotFound(credenciais.NomeUsuario)); 
 
             var result = await loginServico.AutenticarAsync(credenciais);

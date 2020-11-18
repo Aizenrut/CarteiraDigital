@@ -1,4 +1,5 @@
 ﻿using CarteiraDigital.Models;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos
 {
@@ -7,6 +8,6 @@ namespace CarteiraDigital.Servicos
                                                                            where TDtoGerar : struct
     {
         void Efetivar(TDtoEfetivar operacao);
-        void Gerar(TDtoGerar dto);
+        Task Gerar(TDtoGerar dto);
     }
 }
