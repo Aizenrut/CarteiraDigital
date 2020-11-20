@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Globalization;
 using System.Linq;
 
 namespace CarteiraDigital.Servicos
@@ -16,9 +17,19 @@ namespace CarteiraDigital.Servicos
             this.configuracao = configuracao;
         }
 
+        public string[] ObterCulturasSuportadas()
+        {
+            return configuracao.GetSection("CulturasSuportadas").Get<string[]>();
+        }
+
+        public string ObterCulturaPadrao()
+        {
+            return configuracao.GetSection("CulturaPadrao").Value;
+        }
+
         public byte ObterIdadeMinima()
         {
-            var regiaoAtual = System.Globalization.RegionInfo.CurrentRegion.ThreeLetterISORegionName;
+            var regiaoAtual = RegionInfo.CurrentRegion.DisplayName;
             var idadeMinimaSection = configuracao.GetSection("Usuario")
                                                  .GetSection("IdadeMinima");
             byte idadeMinima = 0;

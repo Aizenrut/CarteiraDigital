@@ -18,6 +18,10 @@ using System.Reflection;
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using System.Linq;
+using CarteiraDigital.ProvedorAutenticacao.Extensions;
 
 namespace CarteiraDigital.ProvedorAutenticacao
 {
@@ -91,6 +95,8 @@ namespace CarteiraDigital.ProvedorAutenticacao
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseCulturas();
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
