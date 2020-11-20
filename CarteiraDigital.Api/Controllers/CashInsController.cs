@@ -14,6 +14,12 @@ namespace CarteiraDigital.Api.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1.0")]
+    [Consumes("application/json", "text/json")]
+    [Produces("application/json", "text/json")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErroRespostaDto))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErroRespostaDto))]
     public class CashInsController : ControllerBase
     {
         private readonly ICashInServico cashInServico;

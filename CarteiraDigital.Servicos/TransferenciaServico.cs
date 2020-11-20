@@ -36,6 +36,12 @@ namespace CarteiraDigital.Servicos
             };
         }
 
+        public void ValidarContaDestino(int contaOrigemId, int contaDestinoId) 
+        {
+            if (contaOrigemId == contaDestinoId)
+                throw new CarteiraDigitalException("Não é possível realizar uma transferência para a mesma conta!");
+        }
+
         public void Efetivar(EfetivarOperacaoBinariaDto dto)
         {
             var transferenciaSaida = transferenciaRepositorio.Get(dto.OperacaoSaidaId);
@@ -70,6 +76,7 @@ namespace CarteiraDigital.Servicos
 
         public async Task Gerar(OperacaoBinariaDto dto)
         {
+            ValidarContaDestino(dto.ContaOrigemId, dto.ContaDestinoId);
             operacaoServico.ValidarDescricao(dto.Descricao);
 
             int transferenciaSaidaId = GerarPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);

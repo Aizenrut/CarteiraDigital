@@ -502,5 +502,43 @@ namespace CarteiraDigital.Servicos.Testes
             var excecao = await Assert.ThrowsExceptionAsync<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("A descrição não pode ter mais que 5 caracteres!"));
         }
+
+        [TestMethod]
+        public async Task Gerar_TransferenciaMesmaConta_DeveLancarExcecao()
+        {
+            // Arrange
+            var transferenciaServico = new TransferenciaServico(null, null, null, null, null);
+
+            // Act
+            Func<Task> acao = async () => await transferenciaServico.Gerar(new OperacaoBinariaDto(1, 1, 10, "abcdef"));
+
+            // Assert
+            var excecao = await Assert.ThrowsExceptionAsync<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("Não é possível realizar uma transferência para a mesma conta!"));
+        }
+
+        [TestMethod]
+        public void ValidarContaDestino_TransferenciaMesmaConta_DeveLancarExcecao()
+        {
+            // Arrange
+            var transferenciaServico = new TransferenciaServico(null, null, null, null, null);
+
+            // Act
+            Action acao = () => transferenciaServico.ValidarContaDestino(1, 1);
+
+            // Assert
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("Não é possível realizar uma transferência para a mesma conta!"));
+        }
+
+        [TestMethod]
+        public void ValidarContaDestino_TransferenciaContaDiferente_NaoDeveLancarExcecao()
+        {
+            // Arrange
+            var transferenciaServico = new TransferenciaServico(null, null, null, null, null);
+
+            // Act and Assert
+            transferenciaServico.ValidarContaDestino(1, 2);
+        }
     }
 }
