@@ -4,6 +4,7 @@ using CarteiraDigital.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System;
+using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos.Testes
 {
@@ -28,7 +29,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.When(x => x.Post(Arg.Any<Transferencia>()))
                                     .Do(x => transferenciaGerada = x.Arg<Transferencia>());
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(Arg.Any<int>()).Returns(true);
@@ -67,7 +68,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.When(x => x.Post(Arg.Any<Transferencia>()))
                                     .Do(x => transferenciaGerada = x.Arg<Transferencia>());
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(Arg.Any<int>()).Returns(true);
@@ -122,7 +123,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.Get(transferenciaEntrada.Id).Returns(transferenciaEntrada);
             transferenciaRepositorio.Get(transferenciaSaida.Id).Returns(transferenciaSaida);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(Arg.Any<int>()).Returns(true);
@@ -167,7 +168,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.Get(transferenciaEntrada.Id).Returns(transferenciaEntrada);
             transferenciaRepositorio.Get(transferenciaSaida.Id).Returns(transferenciaSaida);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(Arg.Any<int>()).Returns(false);
@@ -220,7 +221,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.Get(transferenciaEntrada.Id).Returns(transferenciaEntrada);
             transferenciaRepositorio.Get(transferenciaSaida.Id).Returns(transferenciaSaida);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(contaOrigem.Id).Returns(true);
@@ -268,7 +269,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.Get(transferenciaEntrada.Id).Returns(transferenciaEntrada);
             transferenciaRepositorio.Get(transferenciaSaida.Id).Returns(transferenciaSaida);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(contaOrigem.Id).Returns(true);
@@ -318,7 +319,7 @@ namespace CarteiraDigital.Servicos.Testes
             transferenciaRepositorio.Get(transferenciaEntrada.Id).Returns(transferenciaEntrada);
             transferenciaRepositorio.Get(transferenciaSaida.Id).Returns(transferenciaSaida);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(contaOrigem.Id).Returns(true);
@@ -362,7 +363,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
             transferenciaRepositorio.Get(transferencia.Id).Returns(transferencia);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(conta.Id).Returns(true);
@@ -393,7 +394,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
             transferenciaRepositorio.Get(transferencia.Id).Returns(transferencia);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(Arg.Any<int>()).Returns(false);
@@ -426,7 +427,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
             transferenciaRepositorio.Get(transferencia.Id).Returns(transferencia);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(conta.Id).Returns(true);
@@ -465,7 +466,7 @@ namespace CarteiraDigital.Servicos.Testes
             var transferenciaRepositorio = Substitute.For<ITransferenciaRepositorio>();
             transferenciaRepositorio.Get(transferencia.Id).Returns(transferencia);
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(conta.Id).Returns(true);
@@ -481,6 +482,25 @@ namespace CarteiraDigital.Servicos.Testes
             // Assert
             var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
             Assert.IsTrue(excecao.Message.Contains("O saldo da conta é insuficiente para realizar a operação!"));
+        }
+
+        [TestMethod]
+        public async Task Gerar_DescricaoMaiorQueMaximo_DeveLancarExcecao()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            var transferenciaServico = new TransferenciaServico(null, operacaoServico, null, null, null);
+
+            // Act
+            Func<Task> acao = async () => await transferenciaServico.Gerar(new OperacaoBinariaDto(1, 2, 10, "abcdef"));
+
+            // Assert
+            var excecao = await Assert.ThrowsExceptionAsync<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("A descrição não pode ter mais que 5 caracteres!"));
         }
     }
 }

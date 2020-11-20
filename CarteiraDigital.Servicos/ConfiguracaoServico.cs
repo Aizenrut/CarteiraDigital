@@ -9,6 +9,7 @@ namespace CarteiraDigital.Servicos
     {
         private const decimal PERCENTUAL_BONIFICACAO = 0.1m;
         private const decimal PERCENTUAL_TAXA = 0.01m;
+        private const short TAMANHO_MAX_DESCRICAO = 30;
 
         private readonly IConfiguration configuracao;
 
@@ -38,6 +39,11 @@ namespace CarteiraDigital.Servicos
                 idadeMinima = Convert.ToByte(idadeMinimaSection[regiaoAtual]);
 
             return idadeMinima;
+        }
+
+        public short ObterTamanhoMaximoDescricao()
+        {
+            return TAMANHO_MAX_DESCRICAO;
         }
 
         public decimal ObterPercentualBonificacao()

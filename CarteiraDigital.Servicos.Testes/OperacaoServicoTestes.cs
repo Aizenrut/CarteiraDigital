@@ -1,5 +1,6 @@
 ﻿using CarteiraDigital.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System;
 
 namespace CarteiraDigital.Servicos.Testes
@@ -12,7 +13,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn();
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             var resultado = operacaoServico.PodeAlterarStatus(operacao);
@@ -26,7 +27,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn { Status = StatusOperacao.Efetivada };
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             var resultado = operacaoServico.PodeAlterarStatus(operacao);
@@ -40,7 +41,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn { Status = StatusOperacao.ComErro };
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             var resultado = operacaoServico.PodeAlterarStatus(operacao);
@@ -54,7 +55,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn();
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.MarcarEfetivada(operacao);
@@ -70,7 +71,7 @@ namespace CarteiraDigital.Servicos.Testes
             var erro = "teste";
             var operacao = new CashIn();
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.MarcarComErro(operacao, erro);
@@ -85,7 +86,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn();
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Efetivada);
@@ -99,7 +100,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn();
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.ComErro);
@@ -113,7 +114,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn { Status = StatusOperacao.Efetivada };
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.ComErro);
@@ -127,7 +128,7 @@ namespace CarteiraDigital.Servicos.Testes
         {
             // Arrange
             var operacao = new CashIn { Status = StatusOperacao.ComErro };
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.AlterarStatusTemplate(operacao, StatusOperacao.Efetivada);
@@ -142,7 +143,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarValor_ValorMenorQueZero_DeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.ValidarValor(-1);
@@ -156,7 +157,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarValor_ValorIgualAZero_DeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.ValidarValor(0);
@@ -170,7 +171,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarValor_ValorMaiorQueZero_NaoDeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act and Assert
             operacaoServico.ValidarValor(1);
@@ -180,7 +181,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarSaldo_SaldoInsuficiente_DeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.ValidarSaldo(new Conta(), 10);
@@ -194,7 +195,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarSaldo_SaldoMaiorQueOValor_NaoDeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.ValidarSaldo(new Conta { Saldo = 100 }, 10);
@@ -204,7 +205,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarSaldo_SaldoIgualAoValor_NaoDeveLancarExcecao()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.ValidarSaldo(new Conta { Saldo = 10 }, 10);
@@ -217,7 +218,7 @@ namespace CarteiraDigital.Servicos.Testes
             var conta = new Conta { Id = 1 };
             var valor = 10;
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.Creditar(conta, valor);
@@ -233,7 +234,7 @@ namespace CarteiraDigital.Servicos.Testes
             var conta = new Conta();
             var valor = -1;
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.Creditar(conta, valor);
@@ -250,7 +251,7 @@ namespace CarteiraDigital.Servicos.Testes
             // Arrange
             var conta = new Conta { Saldo = 100 };
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.Debitar(conta, 10m);
@@ -265,7 +266,7 @@ namespace CarteiraDigital.Servicos.Testes
             // Arrange
             var conta = new Conta { Saldo = 10 };
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.Debitar(conta, 100);
@@ -282,7 +283,7 @@ namespace CarteiraDigital.Servicos.Testes
             // Arrange
             var conta = new Conta { Saldo = 100 };
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.Debitar(conta, -1);
@@ -299,7 +300,7 @@ namespace CarteiraDigital.Servicos.Testes
             // Arrange
             var mensagem = "Teste unitário.";
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.ValidarArgumentoTemplate(true, mensagem);
@@ -313,7 +314,7 @@ namespace CarteiraDigital.Servicos.Testes
         public void ValidarArgumentoTemplate_CondicaoFalsa_NaoDeveLancarArgumentException()
         {
             // Arrange
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act and Assert
             operacaoServico.ValidarArgumentoTemplate(false, "Teste unitário.");
@@ -330,7 +331,7 @@ namespace CarteiraDigital.Servicos.Testes
                 conta.Saldo = 999;
             };
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             Action acao = () => operacaoServico.AlterarValoresTemplate(conta, -1, acaoPrincipal);
@@ -353,13 +354,82 @@ namespace CarteiraDigital.Servicos.Testes
                 conta.Saldo = valor;
             };
 
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             // Act
             operacaoServico.AlterarValoresTemplate(conta, valor, acaoPrincipal);
 
             // Assert
             Assert.AreEqual(valor, conta.Saldo);
+        }
+
+        [TestMethod]
+        public void ValidarDescricao_DescricaoNula_DevePermitir()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            // Act and Assert
+            operacaoServico.ValidarDescricao(null);
+        }
+
+        [TestMethod]
+        public void ValidarDescricao_DescricaoVazia_DevePermitir()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            // Act and Assert
+            operacaoServico.ValidarDescricao(string.Empty);
+        }
+
+        [TestMethod]
+        public void ValidarDescricao_DescricaoMenorQueMaximo_DevePermitir()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            // Act and Assert
+            operacaoServico.ValidarDescricao("a");
+        }
+
+        [TestMethod]
+        public void ValidarDescricao_DescricaoIgualAoMaximo_DevePermitir()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            // Act and Assert
+            operacaoServico.ValidarDescricao("abcde");
+        }
+
+        [TestMethod]
+        public void ValidarDescricao_DescricaoMaiorQueMaximo_DeveLancarExcecao()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+            
+            // Act
+            Action acao = () => operacaoServico.ValidarDescricao("abcdef");
+
+            // Assert
+            var excecao = Assert.ThrowsException<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("A descrição não pode ter mais que 5 caracteres!"));
         }
     }
 }

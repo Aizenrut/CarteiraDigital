@@ -70,6 +70,8 @@ namespace CarteiraDigital.Servicos
 
         public async Task Gerar(OperacaoBinariaDto dto)
         {
+            operacaoServico.ValidarDescricao(dto.Descricao);
+
             int transferenciaSaidaId = GerarPeloTipo(dto.ContaOrigemId, dto.Valor, dto.Descricao, TipoMovimentacao.Saida);
             int transferenciaEntradaId = GerarPeloTipo(dto.ContaDestinoId, dto.Valor, dto.Descricao, TipoMovimentacao.Entrada);
 

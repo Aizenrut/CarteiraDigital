@@ -7,6 +7,7 @@ namespace CarteiraDigital.Servicos
         string[] ObterCulturasSuportadas();
         string ObterCulturaPadrao();
         byte ObterIdadeMinima();
+        short ObterTamanhoMaximoDescricao();
         decimal ObterPercentualTaxa();
         decimal ObterPercentualBonificacao();
     }

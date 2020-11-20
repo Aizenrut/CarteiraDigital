@@ -61,6 +61,8 @@ namespace CarteiraDigital.Servicos
 
         public async Task Gerar(OperacaoUnariaDto dto)
         {
+            operacaoServico.ValidarDescricao(dto.Descricao);
+
             var conta = contaServico.ObterConta(dto.ContaId);
             var bonificacao = ObterBonificacao(conta.Id, dto.Valor);
 

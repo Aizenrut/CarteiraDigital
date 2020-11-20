@@ -4,6 +4,7 @@ using CarteiraDigital.Models;
 using CarteiraDigital.Servicos.Clients;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
+using System;
 using System.Threading.Tasks;
 
 namespace CarteiraDigital.Servicos.Testes
@@ -27,13 +28,14 @@ namespace CarteiraDigital.Servicos.Testes
 
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualTaxa().Returns(0.01m);
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)15);
 
             var contaRepositorio = Substitute.For<IContaRepositorio>();
             contaRepositorio.Any(conta.Id).Returns(true);
             contaRepositorio.Get(conta.Id).Returns(conta);
 
             var contaServico = new ContaServico(contaRepositorio);
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(configuracaoServico);
             
             var produtorClient = Substitute.For<IProdutorOperacoesClient>();
 
@@ -76,7 +78,7 @@ namespace CarteiraDigital.Servicos.Testes
             contaRepositorio.Get(conta.Id).Returns(conta);
 
             var contaServico = new ContaServico(contaRepositorio);
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualTaxa().Returns(0.01m);
@@ -117,7 +119,7 @@ namespace CarteiraDigital.Servicos.Testes
             contaRepositorio.Any(conta.Id).Returns(false);
 
             var contaServico = new ContaServico(contaRepositorio);
-            var operacaoServico = new OperacaoServico();
+            var operacaoServico = new OperacaoServico(null);
 
             var transacaoServico = Substitute.For<ITransacaoServico>();
             transacaoServico.GerarNova().Returns(transacaoServico);
@@ -132,6 +134,25 @@ namespace CarteiraDigital.Servicos.Testes
             cashOutRepositorio.Received(1).Update(cashOut);
             transacaoServico.Received(0).GerarNova();
             transacaoServico.Received(0).Finalizar();
+        }
+
+        [TestMethod]
+        public async Task Gerar_DescricaoMaiorQueMaximo_DeveLancarExcecao()
+        {
+            // Arrange
+            var configuracaoServico = Substitute.For<IConfiguracaoServico>();
+            configuracaoServico.ObterTamanhoMaximoDescricao().Returns((short)5);
+
+            var operacaoServico = new OperacaoServico(configuracaoServico);
+
+            var cashOutServico = new CashInServico(null, operacaoServico, null, null, null, null);
+
+            // Act
+            Func<Task> acao = async () => await cashOutServico.Gerar(new OperacaoUnariaDto(1, 10, "abcdef"));
+
+            // Assert
+            var excecao = await Assert.ThrowsExceptionAsync<CarteiraDigitalException>(acao);
+            Assert.IsTrue(excecao.Message.Contains("A descrição não pode ter mais que 5 caracteres!"));
         }
     }
 }

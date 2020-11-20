@@ -5,6 +5,12 @@ namespace CarteiraDigital.Servicos
 {
     public class OperacaoServico : IOperacaoServico
     {
+        private readonly IConfiguracaoServico configuracaoServico;
+
+        public OperacaoServico(IConfiguracaoServico configuracaoServico)
+        {
+            this.configuracaoServico = configuracaoServico;
+        }
 
         public bool PodeAlterarStatus(Operacao operacao)
         {
@@ -55,6 +61,14 @@ namespace CarteiraDigital.Servicos
         {
             ValidarValor(valor);
             acaoPrincipal(conta);
+        }
+
+        public void ValidarDescricao(string descricao)
+        {
+            var maximo = configuracaoServico.ObterTamanhoMaximoDescricao();
+
+            ValidarArgumentoTemplate(!string.IsNullOrEmpty(descricao) && descricao.Length > maximo,
+                                     $"A descrição não pode ter mais que {maximo} caracteres!");
         }
 
         public void ValidarValor(decimal valor)
