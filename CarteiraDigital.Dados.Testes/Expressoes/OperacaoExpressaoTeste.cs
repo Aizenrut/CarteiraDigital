@@ -82,7 +82,7 @@ namespace CarteiraDigital.Dados.Testes.Expressoes
         }
 
         [TestMethod]
-        public void Efetivada_DeveRetornar1OperacaoEfetivada()
+        public void Efetivada_DeveRetornar1OperacaoDtoEfetivada()
         {
             // Arrange
             var operacaoExpressao = new OperacaoExpressao();
@@ -92,6 +92,20 @@ namespace CarteiraDigital.Dados.Testes.Expressoes
 
             // Assert
             Assert.AreEqual(1, resultado.Count());
+            Assert.IsTrue(resultado.All(x => x.Status == StatusOperacao.Efetivada));
+        }
+
+        [TestMethod]
+        public void Efetivada_DeveRetornar12OperacoesEfetivadas()
+        {
+            // Arrange
+            var operacaoExpressao = new OperacaoExpressao();
+
+            // Act
+            var resultado = ObterListaOperacoes().Where(operacaoExpressao.Efetivada<Operacao>().Compile());
+
+            // Assert
+            Assert.AreEqual(12, resultado.Count());
             Assert.IsTrue(resultado.All(x => x.Status == StatusOperacao.Efetivada));
         }
 
@@ -142,6 +156,22 @@ namespace CarteiraDigital.Dados.Testes.Expressoes
             Assert.AreEqual(9, resultado.Count());
             Assert.IsTrue(resultado.All(x => x.ContaId == contaId));
             Assert.IsTrue(resultado.All(x => x.Data >= dataInicial && x.Data <= dataFinal));
+        }
+
+        [TestMethod]
+        public void DaContaEfetivada_DeveRetornar6OperacoesEfetivadas()
+        {
+            // Arrange
+            var contaId = 1;
+            var operacaoExpressao = new OperacaoExpressao();
+
+            // Act
+            var resultado = ObterListaOperacoes().Where(operacaoExpressao.DaContaEfetivada<Operacao>(contaId).Compile());
+
+            // Assert
+            Assert.AreEqual(6, resultado.Count());
+            Assert.IsTrue(resultado.All(x => x.ContaId == contaId));
+            Assert.IsTrue(resultado.All(x => x.Status == StatusOperacao.Efetivada));
         }
     }
 }

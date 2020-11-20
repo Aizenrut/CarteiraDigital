@@ -32,7 +32,7 @@ namespace CarteiraDigital.Servicos
 
         public bool EhPrimeiroCashIn(int contaId)
         {
-            return !cashInRepositorio.Any(x => x.ContaId == contaId);
+            return !cashInRepositorio.ExisteCashInEfetivado(contaId);
         }
 
         public void Efetivar(EfetivarOperacaoUnariaDto dto)

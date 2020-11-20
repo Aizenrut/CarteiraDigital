@@ -20,7 +20,7 @@ namespace CarteiraDigital.Servicos.Testes
             int contaId = 1;
 
             var cashInRepositorio = Substitute.For<ICashInRepositorio>();
-            cashInRepositorio.Any(Arg.Any<Expression<Func<CashIn, bool>>>()).Returns(true);
+            cashInRepositorio.ExisteCashInEfetivado(contaId).Returns(true);
 
             var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null, null);
 
@@ -38,7 +38,7 @@ namespace CarteiraDigital.Servicos.Testes
             int contaId = 1;
 
             var cashInRepositorio = Substitute.For<ICashInRepositorio>();
-            cashInRepositorio.Any(Arg.Any<Expression<Func<CashIn, bool>>>()).Returns(false);
+            cashInRepositorio.ExisteCashInEfetivado(contaId).Returns(false);
 
             var cashInServico = new CashInServico(cashInRepositorio, null, null, null, null, null);
 
@@ -274,7 +274,7 @@ namespace CarteiraDigital.Servicos.Testes
             var contaId = 1;
 
             var cashInRepositorio = Substitute.For<ICashInRepositorio>();
-            cashInRepositorio.Any(Arg.Any<Expression<Func<CashIn, bool>>>()).Returns(true);
+            cashInRepositorio.ExisteCashInEfetivado(contaId).Returns(true);
 
             var configuracaoServico = Substitute.For<IConfiguracaoServico>();
             configuracaoServico.ObterPercentualBonificacao().Returns(0.1m);

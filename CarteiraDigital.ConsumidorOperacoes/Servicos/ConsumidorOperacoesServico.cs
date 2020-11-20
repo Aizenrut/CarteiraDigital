@@ -33,7 +33,7 @@ namespace CarteiraDigital.ConsumidorOperacoes.Servicos
 
                 strategy.Efetivar(operacao);
                 canal.BasicAck(eventArgs.DeliveryTag, false);
-                logger.LogInformation($"Operação efetivada.");
+                logger.LogInformation("Operação processada.");
             }
             catch (Exception e)
             {

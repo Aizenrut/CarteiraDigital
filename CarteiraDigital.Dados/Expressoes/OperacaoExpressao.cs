@@ -12,6 +12,11 @@ namespace CarteiraDigital.Dados.Expressoes
             return x => x.ContaId == contaId;
         }
 
+        public Expression<Func<T, bool>> Efetivada<T>() where T : Operacao
+        {
+            return x => x.Status == StatusOperacao.Efetivada;
+        }
+
         public Func<OperacaoDto, bool> Efetivada()
         {
             return x => x.Status == StatusOperacao.Efetivada;
@@ -25,6 +30,11 @@ namespace CarteiraDigital.Dados.Expressoes
         public Expression<Func<T, bool>> DaContaNoPeriodo<T>(int contaId, DateTime dataInicial, DateTime dataFinal) where T : Operacao
         {
             return And<T>(DaConta<T>(contaId), NoPeriodo<T>(dataInicial, dataFinal));
+        }
+
+        public Expression<Func<T, bool>> DaContaEfetivada<T>(int contaId) where T : Operacao
+        {
+            return And<T>(DaConta<T>(contaId), Efetivada<T>());
         }
 
         private Expression<Func<T, bool>> And<T>(Expression<Func<T, bool>> esquerda, Expression<Func<T, bool>> direita) where T : Operacao

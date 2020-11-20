@@ -9,7 +9,7 @@ namespace CarteiraDigital.Servicos
     {
         private const decimal PERCENTUAL_BONIFICACAO = 0.1m;
         private const decimal PERCENTUAL_TAXA = 0.01m;
-        private const short TAMANHO_MAX_DESCRICAO = 30;
+        private const short TAMANHO_MAX_DESCRICAO = 50;
 
         private readonly IConfiguration configuracao;
 
@@ -30,13 +30,13 @@ namespace CarteiraDigital.Servicos
 
         public byte ObterIdadeMinima()
         {
-            var regiaoAtual = RegionInfo.CurrentRegion.DisplayName;
+            var culturaAtual = CultureInfo.CurrentCulture.Name;
             var idadeMinimaSection = configuracao.GetSection("Usuario")
                                                  .GetSection("IdadeMinima");
             byte idadeMinima = 0;
 
-            if (idadeMinimaSection.GetChildren().Any(x => x.Key.Equals(regiaoAtual, StringComparison.InvariantCultureIgnoreCase)))
-                idadeMinima = Convert.ToByte(idadeMinimaSection[regiaoAtual]);
+            if (idadeMinimaSection.GetChildren().Any(x => x.Key.Equals(culturaAtual, StringComparison.InvariantCultureIgnoreCase)))
+                idadeMinima = Convert.ToByte(idadeMinimaSection[culturaAtual]);
 
             return idadeMinima;
         }

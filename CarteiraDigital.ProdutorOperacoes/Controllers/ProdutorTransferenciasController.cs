@@ -29,7 +29,7 @@ namespace CarteiraDigital.ProdutorOperacoes.Controllers
                 return BadRequest();
 
             produtor.Produzir(transferencia, FILA_TRANSFERENCIAS);
-            logger.LogInformation($"Transferências {transferencia.OperacaoEntradaId} e {transferencia.OperacaoSaidaId} enfileiradas.");
+            logger.LogInformation("Transferência enfileirada.");
 
             return Ok();
         }

@@ -29,7 +29,7 @@ namespace CarteiraDigital.ProdutorOperacoes.Controllers
                 return BadRequest();
 
             produtor.Produzir(cashIn, FILA_CASHINS);
-            logger.LogInformation($"Cash-in {cashIn.OperacaoId} enfileirado.");
+            logger.LogInformation("Cash-in enfileirado.");
 
             return Ok();
         }

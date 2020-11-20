@@ -1,5 +1,4 @@
-﻿using CarteiraDigital.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 
 namespace CarteiraDigital.ProvedorAutenticacao.Models

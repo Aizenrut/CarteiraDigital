@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarteiraDigital.Dados.Configuracoes
 {
-    class TransferenciaConfiguration : IEntityTypeConfiguration<Transferencia>
+    public class TransferenciaConfiguration : IEntityTypeConfiguration<Transferencia>
     {
         public void Configure(EntityTypeBuilder<Transferencia> builder)
         {
